@@ -25,3 +25,8 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 
 ![Frame 2 (1)](https://github.com/user-attachments/assets/bc4272ec-4775-4fdc-a0a1-a611cbbff29e)
 ![Frame 3](https://github.com/user-attachments/assets/a3bce156-90a5-42a7-b8eb-0c89bf70e761)
+
+
+## Data Structure
+- Here's our proposed Entity Relationship Diagram which will be intended to be kept straight forward.
+![Untitled (2)](https://github.com/user-attachments/assets/e3e3791f-60eb-4899-bf8a-1a218a78ed63)
