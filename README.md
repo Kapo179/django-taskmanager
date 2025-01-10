@@ -2,7 +2,7 @@
 
 Easily organize and manage your tasks with this Django-based Kanban application.
 
-## Key Features:
+## Key Features
 
 - **User Authentication**: Secure user login and personalized task management using Django's authentication system.
 
