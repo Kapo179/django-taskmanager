@@ -28,5 +28,7 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 
 
 ## Data Structure
-- Here's our proposed Entity Relationship Diagram which will be intended to be kept straight forward.
+
+**Below is our proposed Entity Relationship Diagram which will be intended to be kept straight forward.
+
 ![Untitled (2)](https://github.com/user-attachments/assets/e3e3791f-60eb-4899-bf8a-1a218a78ed63)
