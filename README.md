@@ -22,5 +22,6 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 
 - The Landing website mockup, focuses on providing the user with a demo kanban board, to allow interaction before building their own board.
 - The Second page is the intended simple, main app page. Simplified to not overwhelm the user, and sticks to the theme adopted within the website mockup. This could change in the future
+
 ![Frame 2 (1)](https://github.com/user-attachments/assets/bc4272ec-4775-4fdc-a0a1-a611cbbff29e)
 ![Frame 3](https://github.com/user-attachments/assets/a3bce156-90a5-42a7-b8eb-0c89bf70e761)
