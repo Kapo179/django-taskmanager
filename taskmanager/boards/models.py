@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 class Status(models.Model):
     # Stores the different columns of the Kanban board (e.g., "To Do", "In Progress", "Done")
@@ -20,7 +20,10 @@ class Task(models.Model):
     
     # Relationships section
     status = models.ForeignKey(Status, on_delete=models.CASCADE)  # Which column the task belongs to
-    user = models.ForeignKey(User, on_delete=models.CASCADE)    # Who owns the task
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # Changed from User to settings.AUTH_USER_MODEL
+        on_delete=models.CASCADE
+    )
     
     # Timestamps section
     created_at = models.DateTimeField(auto_now_add=True)  # When task was created
