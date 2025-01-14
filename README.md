@@ -29,12 +29,12 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 
 ## Data Structure
 
-**Below is our proposed Entity Relationship Diagram which will be intended to be kept straight forward.
+**Below is our proposed Entity Relationship Diagram which will be intended to be kept straight forward.**
 
 ![Untitled (2)](https://github.com/user-attachments/assets/e3e3791f-60eb-4899-bf8a-1a218a78ed63)
 
 ## Inspiration
 
-**Below is the initial inspiration, which shows kanban board used by monday.com 
+**Below is the initial inspiration, which shows kanban board used by monday.com** 
 
 ![image](https://github.com/user-attachments/assets/484e76aa-b358-4e88-99ac-2092830f3f2f)
