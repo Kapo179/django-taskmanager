@@ -38,3 +38,11 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 **Below is the initial inspiration, which shows the kanban board design used by monday.com** 
 
 ![image](https://github.com/user-attachments/assets/484e76aa-b358-4e88-99ac-2092830f3f2f)
+
+## AI Usage 
+
+**Example of AI Support**
+
+- I hit a roadblock in which i accidentally pushed another repo from within this project, and I needed to undo this without destroying my django model.
+
+![image](https://github.com/user-attachments/assets/508a387c-19fb-4093-92fe-9849e7702d57)
