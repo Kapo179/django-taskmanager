@@ -49,11 +49,6 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 
 
 ## Testing
-To run all tests:
-   python manage.py test
-
-To run tests for the Boards app only:
-   python manage.py test boards
 
 In our initial tests of our models, we've documented our test which reviewed task association to the user, as well as task creation functionality for authenticated and non-authenticated users.
 
