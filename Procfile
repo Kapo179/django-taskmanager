@@ -1,1 +1,1 @@
-web: gunicorn taskmanager.wsgi 
+web: cd taskmanager && gunicorn taskmanager.wsgi  
