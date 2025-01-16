@@ -46,3 +46,11 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 - I hit a roadblock in which i accidentally pushed another repo from within this project, and I needed to undo this without destroying my django model.
 
 ![image](https://github.com/user-attachments/assets/508a387c-19fb-4093-92fe-9849e7702d57)
+
+
+## Testing
+To run all tests:
+   python manage.py test
+
+To run tests for the Boards app only:
+   python manage.py test boards
