@@ -54,3 +54,17 @@ To run all tests:
 
 To run tests for the Boards app only:
    python manage.py test boards
+
+In our initial tests of our models, we've documented our test which reviewed task association to the user, as well as task creation functionality for authenticated and non-authenticated users.
+
+**To run these tests yourself:**
+
+Ensure you have navigate to 'cd taskmanager' (If you are already in /django-taskmanager, do this)
+
+Then run python manage.py test boards.tests.test_views (This will test taskmanager/boards/tests/test_views.py)
+
+If you like to test (taskmanager/boards/test/test_views.py), run python manage.py test boards.tests.tests
+
+![image](https://github.com/user-attachments/assets/917f62e2-a32d-477e-bc94-5889a560b5f8)
+
+![image](https://github.com/user-attachments/assets/a7129314-ff9b-42b9-a1a6-34a0adc98cc1)
