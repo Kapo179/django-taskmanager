@@ -26,6 +26,19 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 ![Frame 2 (1)](https://github.com/user-attachments/assets/bc4272ec-4775-4fdc-a0a1-a611cbbff29e)
 ![Frame 3](https://github.com/user-attachments/assets/a3bce156-90a5-42a7-b8eb-0c89bf70e761)
 
+## Typography
+- SF Compact Display 
+( For H2 - Font-weight: 600 )
+- SF Compact Display - Bold for H1
+
+We settled with SF Compact Display, It is an Apple system font therefore I need to remain cautious about my usage.
+
+As you can see, my styling and usage of the font, replicates my mock-up well. (Mockup Above)
+![image](https://github.com/user-attachments/assets/57a98c8c-8b80-4879-a697-859a70931557)
+
+
+
+
 
 ## Data Structure
 
@@ -69,3 +82,7 @@ If you like to test (taskmanager/boards/test/test_views.py), run python manage.p
 ![image](https://github.com/user-attachments/assets/917f62e2-a32d-477e-bc94-5889a560b5f8)
 
 ![image](https://github.com/user-attachments/assets/a7129314-ff9b-42b9-a1a6-34a0adc98cc1)
+
+## Mockup Replication Attempt
+
+
