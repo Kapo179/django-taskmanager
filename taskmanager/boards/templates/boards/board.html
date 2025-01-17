@@ -3,11 +3,21 @@
 
 {% block content %}
 <div class="container my-4">
-  <h1>{{ board.title }}</h1>
+  <div class="board-header">
+    <h1>{{ board.title }}</h1>
+    <button class="add-task-btn">
+      <span>+</span> Add Task
+    </button>
+  </div>
   <p>{{ board.description }}</p>
 
   <div class="kanban-container d-flex justify-content-between">
     <!-- below are the columns: Not Started, Doing, Done -->
+    <!-- class="kanban-column" = the column -->
+    <!-- class="column-header" = the header of the column -->
+    <!-- class="kanban-card" = the card in the column -->
+    <!-- class="column-header 'not-started' 'doing' 'done' " = targets a specific column -->
+
     <div class="kanban-column">
       <span class="column-header not-started">Not Started</span>
       {% for task in tasks %}
@@ -46,6 +56,42 @@
     </div>
   </div>
 </div>
+
+<!--Here we will add the modal for adding a task-->
+
+<div id="taskModal" class="task-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Task</h3>
+        <span class="close-modal">x</span>
+      </div>
+      <div class="modal-body">
+        <form id="taskForm">
+          <div class="form-group">
+            <label for="taskTitle">Title</label>
+            <input type="text" id="taskTitle" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="taskDescription">Description</label>
+            <textarea id="taskDescription" name="description"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="taskStatus">Status</label>
+            <select id="taskStatus" name="status" required>
+              <option value="not-started">Not Started</option>
+              <option value="doing">Doing</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn-primary">Add Task</button>
+            <button type="button" class="btn-secondary close-modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+
 
 <!-- Here's the CSS for the kanban board-->
 <style>
@@ -125,6 +171,60 @@ h1, h2, h5 {
     color: #837173;
 }
 
+.task-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background: white;
+    width: 80%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.close-modal {
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+}
+
+.modal-footer {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.modal-footer button {
+    padding: 8px 16px;
+    margin-left: 10px;
+}
 
 .container {
     background-color: #F9FAFB;
@@ -164,4 +264,28 @@ h1, h2, h5 {
 
 
 </style>
+
+<script>
+// Get modal elements
+const modal = document.getElementById('taskModal');
+const openModalBtn = document.querySelector('.add-task-btn');
+const closeModalBtn = document.querySelector('.close-modal');
+
+// This opens the modal
+openModalBtn.addEventListener('click', () => {
+    modal.style.display = 'block';
+});
+
+// This closes the modal
+closeModalBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// This closes the modal when clicking outside
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+</script>
 {% endblock %}
