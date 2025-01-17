@@ -9,7 +9,7 @@
   <div class="kanban-container d-flex justify-content-between">
     <!-- below are the columns: Not Started, Doing, Done -->
     <div class="kanban-column">
-      <h2>Not Started</h2>
+      <span class="column-header not-started">Not Started</span>
       {% for task in tasks %}
         {% if task.status.name == "Not Started" %}
           <div class="kanban-card mb-3">
@@ -22,7 +22,7 @@
     </div>
 
     <div class="kanban-column">
-      <h2>Doing</h2>
+      <span class="column-header doing">Doing</span>
       {% for task in tasks %}
         {% if task.status.name == "Doing" %}
           <div class="kanban-card mb-3">
@@ -34,7 +34,7 @@
     </div>
 
     <div class="kanban-column">
-      <h2>Done</h2>
+      <span class="column-header done">Done</span> 
       {% for task in tasks %}
         {% if task.status.name == "Done" %}
           <div class="kanban-card mb-3">
@@ -53,6 +53,13 @@
     font-family: 'SF Compact Display';
     src: url('https://sf.abarba.me/SF-Compact-Display-Bold.otf');
     font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Compact Display';
+    src: url('https://sf.abarba.me/SF-Compact-Display-Semibold.otf');
+    font-weight: 600;
     font-style: normal;
 }
 
@@ -76,18 +83,53 @@ h1, h2, h5 {
 
 .kanban-column {
     flex: 1;
-    background: #f8f9fa; 
-    padding: 1rem;
-    border-radius: 5px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     min-width: 300px;
     max-width: 350px;
 }
 
 .kanban-card {
-    background: #fff;
-    border: 1px solid #ddd;
-    padding: 1rem;
-    border-radius: 5px;
+    background: white;
+    border: 1px solid #E5E7EB;
+    padding: 16px;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    margin-bottom: 12px;
+}
+
+.column-header {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.not-started {
+    background-color: #F3F4F6;
+    color: #6B7280;
+}
+
+.doing {
+    background-color: #F0E7F6;
+    color: #7B777E;
+}
+
+.done {
+    background-color: #FFDCE0;
+    color: #837173;
+}
+
+
+.container {
+    background-color: #F9FAFB;
+    min-height: 100vh;
+    padding: 24px;
 }
 
 /* Responsive styles */
@@ -119,5 +161,7 @@ h1, h2, h5 {
         margin-bottom: 0.5rem;
     }
 }
+
+
 </style>
 {% endblock %}
