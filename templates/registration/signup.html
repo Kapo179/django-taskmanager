@@ -25,12 +25,13 @@
 
 <style>
     /* This is the CSS for the signup modal */
-.auth-modal {
+    .auth-modal {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background: #f3f4f6;
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .modal-wrapper {
@@ -49,6 +50,13 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
+.modal-header h3 {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: #111827;
+}
+
 .modal-body {
     padding: 16px;
 }
@@ -60,13 +68,17 @@
 .form-group label {
     display: block;
     margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .form-group input {
-    width: 100%;
+    width: calc(100% - 16px);
     padding: 8px;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
+    box-sizing: border-box;
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 button {
@@ -77,11 +89,48 @@ button {
     border: none;
     border-radius: 6px;
     margin-bottom: 16px;
+    cursor: pointer;
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
 }
 
 .signup-link {
     text-align: center;
     font-size: 14px;
+}
+
+.signup-link a {
+    color: #2d5079;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Style the form paragraphs for signup form */
+form p {
+    margin-bottom: 16px;
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11px;
+}
+
+form p label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 650;
+}
+
+form p input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 </style>
 {% endblock %} 
