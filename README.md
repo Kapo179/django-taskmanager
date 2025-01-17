@@ -34,7 +34,7 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 We settled with SF Compact Display, It is an Apple system font therefore I need to remain cautious about my usage.
 
 As you can see, my styling and usage of the font, replicates my mock-up well. (Mockup Above)
-![image](https://github.com/user-attachments/assets/cd4c5410-e328-4fbf-abd4-0f85e5bf59f2)
+![image](https://github.com/user-attachments/assets/57a98c8c-8b80-4879-a697-859a70931557)
 
 
 
