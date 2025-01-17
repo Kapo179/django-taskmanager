@@ -85,4 +85,15 @@ If you like to test (taskmanager/boards/test/test_views.py), run python manage.p
 
 ## Mockup Replication Attempt
 
+**Modal Design**
 
+The initial modal designed by me, was not styled as well as I'd like it to turn out.
+![image](https://github.com/user-attachments/assets/3121cef7-0672-422c-925e-0ca5f40cae35)
+
+Therefore I found a modal design online which used tailwindcss
+
+![image](https://github.com/user-attachments/assets/3d02d09b-cd5f-41a3-8440-f2480dd19e6d)
+
+The end result, drastically improved the modal design.
+
+![image](https://github.com/user-attachments/assets/47ffb326-797a-4d28-acac-537e4691940d)
