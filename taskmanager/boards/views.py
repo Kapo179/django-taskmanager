@@ -9,18 +9,11 @@ def board_view(request):
     Main view for the Kanban board.
     Displays all tasks organized by their status.
     """
-    # Get all statuses and their associated tasks
-    statuses = Status.objects.all()
-    tasks_by_status = {}
-    # Organise tasks by their status 
-    for status in statuses:
-        tasks_by_status[status] = Task.objects.filter(
-            status=status,
-            user=request.user
-        )
+    # Get all tasks for the current user
+    tasks = Task.objects.filter(user=request.user)
     
     return render(request, 'boards/board.html', {
-        'tasks_by_status': tasks_by_status
+        'tasks': tasks  # tasks rendered in the board.html template
     })
 
 @login_required
@@ -29,10 +22,10 @@ def add_task(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
-        status_id = request.POST.get('status')
+        status_name = request.POST.get('status')
         # Create task only if required fields are provided
-        if title and status_id:
-            status = get_object_or_404(Status, id=status_id)
+        if title and status_name:
+            status = Status.objects.get_or_create(name=status_name)[0]
             Task.objects.create(
                 title=title,
                 description=description,

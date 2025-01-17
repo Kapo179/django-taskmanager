@@ -21,7 +21,7 @@
     <div class="kanban-column">
       <span class="column-header not-started">Not Started</span>
       {% for task in tasks %}
-        {% if task.status.name == "Not Started" %}
+        {% if task.status.name == "not-started" %}
           <div class="kanban-card mb-3">
             <h5>{{ task.title }}</h5>
             <p>{{ task.description }}</p>
@@ -34,7 +34,7 @@
     <div class="kanban-column">
       <span class="column-header doing">Doing</span>
       {% for task in tasks %}
-        {% if task.status.name == "Doing" %}
+        {% if task.status.name == "doing" %}
           <div class="kanban-card mb-3">
             <h5>{{ task.title }}</h5>
             <p>{{ task.description }}</p>
@@ -46,7 +46,7 @@
     <div class="kanban-column">
       <span class="column-header done">Done</span> 
       {% for task in tasks %}
-        {% if task.status.name == "Done" %}
+        {% if task.status.name == "done" %}
           <div class="kanban-card mb-3">
             <h5>{{ task.title }}</h5>
             <p>{{ task.description }}</p>
@@ -66,7 +66,8 @@
         <span class="close-modal">x</span>
       </div>
       <div class="modal-body">
-        <form id="taskForm">
+        <form id="taskForm" method="POST" action="{% url 'add_task' %}">
+          {% csrf_token %}
           <div class="form-group">
             <label for="taskTitle">Title</label>
             <input type="text" id="taskTitle" name="title" required>
@@ -270,6 +271,7 @@ h1, h2, h5 {
 const modal = document.getElementById('taskModal');
 const openModalBtn = document.querySelector('.add-task-btn');
 const closeModalBtn = document.querySelector('.close-modal');
+const taskForm = document.getElementById('taskForm');
 
 // This opens the modal
 openModalBtn.addEventListener('click', () => {
@@ -285,6 +287,29 @@ closeModalBtn.addEventListener('click', () => {
 window.addEventListener('click', (e) => {
     if (e.target === modal) {
         modal.style.display = 'none';
+    }
+});
+
+// Handle form submission
+taskForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(taskForm);
+    
+    try {
+        const response = await fetch(taskForm.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        });
+        
+        if (response.ok) {
+            modal.style.display = 'none';
+            window.location.reload();  // Refresh to show new task
+        }
+    } catch (error) {
+        console.error('Error:', error);
     }
 });
 </script>
