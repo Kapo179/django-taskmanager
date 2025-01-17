@@ -3,13 +3,10 @@
 
 {% block content %}
 <div class="container my-4">
-  <div class="board-header">
-    <h1>{{ board.title }}</h1>
-    <button class="add-task-btn">
-      <span>+</span> Add Task
-    </button>
+  <div class="info-container">
+    <h2>Starter board</h2>
+    <p class="subheading">A description of a board.</p>
   </div>
-  <p>{{ board.description }}</p>
 
   <div class="kanban-container d-flex justify-content-between">
     <!-- below are the columns: Not Started, Doing, Done -->
@@ -19,7 +16,10 @@
     <!-- class="column-header 'not-started' 'doing' 'done' " = targets a specific column -->
 
     <div class="kanban-column">
-      <span class="column-header not-started">Not Started</span>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="column-header not-started">Not Started</span>
+        <button class="add-task-btn" style="color: #6B7280; background: none; border: none; cursor: pointer;">+ Add Task</button>
+      </div>
       {% for task in tasks %}
         {% if task.status.name == "not-started" %}
           <div class="kanban-card mb-3">
@@ -55,41 +55,48 @@
       {% endfor %}
     </div>
   </div>
+
 </div>
 
 <!--Here we will add the modal for adding a task-->
 
 <div id="taskModal" class="task-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Add New Task</h3>
-        <span class="close-modal">x</span>
-      </div>
-      <div class="modal-body">
-        <form id="taskForm" method="POST" action="{% url 'add_task' %}">
-          {% csrf_token %}
-          <div class="form-group">
-            <label for="taskTitle">Title</label>
-            <input type="text" id="taskTitle" name="title" required>
-          </div>
-          <div class="form-group">
-            <label for="taskDescription">Description</label>
-            <textarea id="taskDescription" name="description"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="taskStatus">Status</label>
-            <select id="taskStatus" name="status" required>
-              <option value="not-started">Not Started</option>
-              <option value="doing">Doing</option>
-              <option value="done">Done</option>
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn-primary">Add Task</button>
-            <button type="button" class="btn-secondary close-modal">Cancel</button>
-          </div>
-        </form>
-      </div>
+    <div class="modal-wrapper">
+        <!-- Modal content -->
+        <div class="modal-container">
+            <!-- Modal header -->
+            <div class="modal-header">
+                <h3>Create New Task</h3>
+                <button type="button" class="close-modal">×</button>
+            </div>
+            <!-- Modal body -->
+            <form id="taskForm" method="POST" action="{% url 'add_task' %}" class="modal-form">
+                {% csrf_token %}
+                <div class="form-content">
+                    <div class="form-group">
+                        <label for="taskTitle">Title</label>
+                        <input type="text" id="taskTitle" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Description</label>
+                        <textarea id="taskDescription" name="description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskStatus">Status</label>
+                        <select id="taskStatus" name="status" required>
+                            <option value="not-started">Not Started</option>
+                            <option value="doing">Doing</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-submit">
+                        + Add Task
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -99,24 +106,44 @@
 @font-face {
     font-family: 'SF Compact Display';
     src: url('https://sf.abarba.me/SF-Compact-Display-Bold.otf');
-    font-weight: bold;
-    font-style: normal;
+    font-weight: 700;
+    font-style: Bold;
 }
 
 @font-face {
     font-family: 'SF Compact Display';
     src: url('https://sf.abarba.me/SF-Compact-Display-Semibold.otf');
     font-weight: 600;
+    font-style: semibold;
+}
+
+@font-face {
+    font-family: 'SF Compact Display';
+    src: url('https://sf.abarba.me/SF-Compact-Display-Regular.otf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Compact Display';
+    src: url('https://sf.abarba.me/SF-Compact-Display-Light.otf');
+    font-weight: 300;
     font-style: normal;
 }
 
 body {
     font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
 }
 
-h1, h2, h5 {
+h1 {
     font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: bold;
+    font-weight: 700;
+}
+
+h2, h5 {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
 }
 
 .kanban-container {
@@ -125,12 +152,12 @@ h1, h2, h5 {
     justify-content: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
 }
 
 .kanban-column {
     flex: 1;
-    background: white;
+    background: #F3F4F4;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -140,10 +167,10 @@ h1, h2, h5 {
 
 .kanban-card {
     background: white;
-    border: 1px solid #E5E7EB;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 16px;
-    border-radius: 6px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     margin-bottom: 12px;
 }
 
@@ -158,7 +185,7 @@ h1, h2, h5 {
 }
 
 .not-started {
-    background-color: #F3F4F6;
+    background-color: #E1E4E8;
     color: #6B7280;
 }
 
@@ -177,58 +204,114 @@ h1, h2, h5 {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 50;
+    padding: 1rem;
 }
 
-.modal-content {
-    background: white;
-    width: 80%;
+.modal-wrapper {
     max-width: 500px;
-    margin: 50px auto;
-    padding: 20px;
+    margin: 2rem auto;
+}
+
+.modal-container {
+    background: white;
     border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
 }
 
 .close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
     cursor: pointer;
+    color: #6b7280;
 }
 
-.form-group {
-    margin-bottom: 15px;
+.modal-form {
+    padding: 1rem;
+    max-width: 100%;
+}
+
+.form-content {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    max-width: 100%;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
 }
 
-.form-group input,
-.form-group textarea,
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #f9fafb;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #f9fafb;
+    max-width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 100px;
+    max-height: 200px;
+}
+
 .form-group select {
     width: 100%;
-    padding: 8px;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #f9fafb;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .modal-footer {
-    margin-top: 20px;
+    padding-top: 1rem;
     text-align: right;
 }
 
-.modal-footer button {
-    padding: 8px 16px;
-    margin-left: 10px;
+.btn-submit {
+    background: #212121;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .container {
-    background-color: #F9FAFB;
+    background-color: white;
     min-height: 100vh;
     padding: 24px;
 }
@@ -263,6 +346,59 @@ h1, h2, h5 {
     }
 }
 
+.info-container {
+    border-radius: 8px;
+    padding: 5px;
+    max-width: 1200px;
+    margin: 10px auto;
+}
+
+.info-container h2 {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
+    margin-bottom: 1px;
+}
+
+.info-container .subheading {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 300;
+    color: #6B7280;
+}
+
+
+.column-header {
+    font-weight: 600;
+}
+
+
+.kanban-card h5 {
+    font-weight: 600;
+    font-size: 15px;
+    margin: 0 0 4px 0;
+    color: #2D3748;
+}
+
+
+.kanban-card p {
+    font-weight: 400;
+    font-size: 14px;
+    color: #718096;
+    margin: 0;
+    line-height: 1.4;
+}
+
+
+.modal-header h3 {
+    font-weight: 600;
+}
+
+.form-group label {
+    font-weight: 500;
+}
+
+.btn-submit {
+    font-weight: 600;
+}
 
 </style>
 
