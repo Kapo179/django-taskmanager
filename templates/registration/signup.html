@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!--This is the modal box that contains the signup form-->
+<div id="auth-modal" class="auth-modal">
+    <div class="modal-wrapper">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Create Account</h3>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'signup' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Sign Up</button>
+                    <!--This allows the users to login if they already have an account-->
+                    <div class="signup-link">
+                        Already have an account? <a href="{% url 'login' %}">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
