@@ -4,8 +4,8 @@
 {% block content %}
 <div class="container my-4">
   <div class="info-container">
-    <h2>Starter board</h2>
-    <p class="subheading">A description of a board.</p>
+    <h2>Welcome, {{ request.user.username }}</h2>
+    <p class="subheading">Manage your tasks below</p>
   </div>
 
   <div class="kanban-container d-flex justify-content-between">
@@ -399,7 +399,6 @@ h2, h5 {
 .btn-submit {
     font-weight: 600;
 }
-
 </style>
 
 <script>

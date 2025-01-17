@@ -2,27 +2,38 @@
 <html>
 <head>
     <title>Task Manager</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* Add SF Compact Display font */
+        @font-face {
+            font-family: 'SF Compact Display';
+            src: url('https://sf.abarba.me/SF-Compact-Display-Regular.otf');
+            font-weight: 400;
+        }
+
+        /* Style the top navigation */
+        .top-nav {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1rem;
+        }
+
+        /* Simple logout button */
+        .logout-link {
+            font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #6B7280;
+            text-decoration: none;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-    <nav>
+    <div class="top-nav">
         {% if user.is_authenticated %}
-            <span>Welcome, {{ user.username }}</span>
-            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'logout' %}" class="logout-link">Logout</a>
         {% endif %}
-    </nav>
-    
-    <main>
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        
-        {% block content %}
-        {% endblock %}
-    </main>
+    </div>
+    {% block content %}
+    {% endblock %}
 </body>
 </html> 
