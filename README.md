@@ -96,4 +96,5 @@ Therefore I found a modal design online which used tailwindcss
 
 The end result, drastically improved the modal design.
 
-![image](https://github.com/user-attachments/assets/47ffb326-797a-4d28-acac-537e4691940d)
+![image](https://github.com/user-attachments/assets/a266726b-dcd8-49db-b29a-9a92d311759c)
+
