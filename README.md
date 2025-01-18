@@ -27,20 +27,20 @@ Easily organize and manage your tasks with this Django-based Kanban application.
 ![Frame 3](https://github.com/user-attachments/assets/a3bce156-90a5-42a7-b8eb-0c89bf70e761)
 
 ## Typography
-- SF Compact Display 
-( For H1, H2, - Font-weight: 700 )
-( For H3, H4, H5 - Font-weight: 500)
-( For H3, H4, H5 - Font-weight: 400)
+SF Compact Display 
+- ( For H1, H2, - Font-weight: 700 )
+- ( For H3, H4, H5 - Font-weight: 500)
+- ( For H3, H4, H5 - Font-weight: 400)
 
 ## Colour Pallette
-- Kanban Colour Usage
-( #838383 - For Not Started UI | #747577- Font colour )
-( #F0E7F6 - For Doing Title UI | #7B777E - Font colour  )
-( #FFDCE0 - For Done Title UI | #837173 - Font colour  )
-( #FFFFFF & #DDDDDD {Border Strokes} - For Card UI, e.g: Kanban Cards, Registration or New Task Modals )
-( #F3F4F4 Column Background )
-( #CBDFD8 - Slightly Important Tag | #68736F - Font colour )
-( #FFDCE0 - Urgent Tag | #837173 - Font colour )
+Kanban Colour Usage
+- ( #838383 - For Not Started UI | #747577- Font colour )
+- ( #F0E7F6 - For Doing Title UI | #7B777E - Font colour  )
+- ( #FFDCE0 - For Done Title UI | #837173 - Font colour  )
+- ( #FFFFFF & #DDDDDD {Border Strokes} - For Card UI, e.g: Kanban Cards, Registration or New Task Modals )
+- ( #F3F4F4 Column Background )
+- ( #CBDFD8 - Slightly Important Tag | #68736F - Font colour )
+- ( #FFDCE0 - Urgent Tag | #837173 - Font colour )
 
 We settled with SF Compact Display, It is an Apple system font therefore I need to remain cautious about my usage.
 
