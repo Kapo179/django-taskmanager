@@ -115,3 +115,9 @@ The end result, drastically improved the modal design.
 
 ![image](https://github.com/user-attachments/assets/a266726b-dcd8-49db-b29a-9a92d311759c)
 
+
+## Drag & Drop Functionality
+
+We utilised SortableJS a drag & drop javascript, with prebuilt CSS and Animation. This gave us our working Drag & Drop functionality.
+
+![image](https://github.com/user-attachments/assets/1eb58bd8-a843-4641-a40e-22db7263c574)
