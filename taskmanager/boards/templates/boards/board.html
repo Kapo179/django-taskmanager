@@ -491,14 +491,15 @@ document.querySelectorAll('.task-list').forEach(taskList => {
             const taskId = evt.item.dataset.taskId;
             const newStatus = evt.to.dataset.status;
             
+            // Add CSRF token to form data
+            const formData = new FormData();
+            formData.append('status', newStatus);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            
             // Send update to server
             fetch(`/task/${taskId}/update/`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: `status=${newStatus}`
+                body: formData
             })
             .then(response => {
                 if (!response.ok) {

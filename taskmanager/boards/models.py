@@ -12,6 +12,13 @@ class Status(models.Model):
     class Meta:
         verbose_name_plural = "Statuses"  # Fix plural form in admin panel
 
+    @classmethod
+    def ensure_default_statuses(cls):
+        """Ensure the default statuses exist"""
+        default_statuses = ['not-started', 'doing', 'done']
+        for status_name in default_statuses:
+            cls.objects.get_or_create(name=status_name)
+
 
 class Task(models.Model):
     # Task information section

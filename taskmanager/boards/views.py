@@ -41,10 +41,15 @@ def update_task_status(request, task_id):
     """Update a task's status"""
     if request.method == 'POST':
         task = get_object_or_404(Task, id=task_id, user=request.user)
-        new_status_id = request.POST.get('status')
-        # Ensure task belongs to current user
-        if new_status_id:
-            status = get_object_or_404(Status, id=new_status_id)
+        new_status_name = request.POST.get('status')
+        
+        if new_status_name:
+            # This checks, to ensure we have the status in our database
+            status = Status.objects.filter(name=new_status_name).first()
+            if not status:
+                # Create the status if it doesn't exist
+                status = Status.objects.create(name=new_status_name)
+            
             task.status = status
             task.save()
             messages.success(request, 'Task updated successfully!')
