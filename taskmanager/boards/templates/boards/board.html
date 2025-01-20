@@ -20,39 +20,45 @@
         <span class="column-header not-started">Not Started</span>
         <button class="add-task-btn" style="color: #6B7280; background: none; border: none; cursor: pointer;">+ Add Task</button>
       </div>
-      {% for task in tasks %}
-        {% if task.status.name == "not-started" %}
-          <div class="kanban-card mb-3">
-            <h5>{{ task.title }}</h5>
-            <p>{{ task.description }}</p>
-            <!-- May add more icons soon -->
-          </div>
-        {% endif %}
-      {% endfor %}
+      <div class="task-list" data-status="not-started">
+        {% for task in tasks %}
+          {% if task.status.name == "not-started" %}
+            <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
+              <h5>{{ task.title }}</h5>
+              <p>{{ task.description }}</p>
+              <!-- May add more icons soon -->
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
 
     <div class="kanban-column">
       <span class="column-header doing">Doing</span>
-      {% for task in tasks %}
-        {% if task.status.name == "doing" %}
-          <div class="kanban-card mb-3">
-            <h5>{{ task.title }}</h5>
-            <p>{{ task.description }}</p>
-          </div>
-        {% endif %}
-      {% endfor %}
+      <div class="task-list" data-status="doing">
+        {% for task in tasks %}
+          {% if task.status.name == "doing" %}
+            <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
+              <h5>{{ task.title }}</h5>
+              <p>{{ task.description }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
 
     <div class="kanban-column">
       <span class="column-header done">Done</span> 
-      {% for task in tasks %}
-        {% if task.status.name == "done" %}
-          <div class="kanban-card mb-3">
-            <h5>{{ task.title }}</h5>
-            <p>{{ task.description }}</p>
-          </div>
-        {% endif %}
-      {% endfor %}
+      <div class="task-list" data-status="done">
+        {% for task in tasks %}
+          {% if task.status.name == "done" %}
+            <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
+              <h5>{{ task.title }}</h5>
+              <p>{{ task.description }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 
@@ -399,7 +405,31 @@ h2, h5 {
 .btn-submit {
     font-weight: 600;
 }
+
+/* Sortable.js styles */
+.sortable-ghost {
+    opacity: 0.4;
+    background: #F3F4F4;
+}
+
+.sortable-chosen {
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sortable-drag {
+    opacity: 0.8;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.task-list {
+    min-height: 200px;
+    padding: 8px 0;
+}
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
 <script>
 // Get modal elements
@@ -446,6 +476,42 @@ taskForm.addEventListener('submit', async (e) => {
     } catch (error) {
         console.error('Error:', error);
     }
+});
+
+// Initialize Sortable for each task list
+document.querySelectorAll('.task-list').forEach(taskList => {
+    new Sortable(taskList, {
+        group: 'shared',  // Set shared group to allow dragging between lists
+        animation: 150,   // Animation speed in milliseconds
+        ghostClass: 'sortable-ghost',  // Class for the dragging item
+        chosenClass: 'sortable-chosen',  // Class for the chosen item
+        dragClass: 'sortable-drag',  // Class for the dragging item
+        
+        onEnd: function(evt) {
+            const taskId = evt.item.dataset.taskId;
+            const newStatus = evt.to.dataset.status;
+            
+            // Send update to server
+            fetch(`/task/${taskId}/update/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: `status=${newStatus}`
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // If update fails, refresh the page to reset positions
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.reload();
+            });
+        }
+    });
 });
 </script>
 {% endblock %}
