@@ -1,6 +1,12 @@
-# Django Kanban: Task Management App
+# KanDo App
 
-Easily organize and manage your tasks with this Django-based Kanban application.
+KanDo is a simple, sleek task manager kanban board, which can be used manage tasks in visual columns.
+
+Easily organize and manage your tasks with this Django-based Kanban Task Manager application.
+
+**Who's it for?**
+Wanting to track tasks in a simple to view kanban board?...<more features will be added here>
+
 
 ## Key Features
 
