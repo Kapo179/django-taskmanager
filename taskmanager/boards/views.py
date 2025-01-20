@@ -55,4 +55,13 @@ def update_task_status(request, task_id):
             messages.success(request, 'Task updated successfully!')
     
     return redirect('board')
+
+@login_required
+def delete_task(request, task_id):
+    """Delete a task"""
+    if request.method == 'POST':
+        task = get_object_or_404(Task, id=task_id, user=request.user)
+        task.delete()
+        messages.success(request, 'Task deleted successfully!')
+    return redirect('board')
  
