@@ -1,3 +1,8 @@
+"""
+This module contains tests for the views in the boards app.
+It includes tests for the board view, task creation, and task deletion.
+"""
+
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -41,9 +46,8 @@ class BoardViewTests(TestCase):
             'status': self.status.id,
         }
         response = self.client.post(url, form_data)
-
         # Should redirect back to 'board' after creation
         self.assertRedirects(response, reverse('board'))
 
         # Check the task was created
-        self.assertTrue(Task.objects.filter(title='Unit Test Task').exists()) 
+        self.assertTrue(Task.objects.filter(title='Unit Test Task').exists())

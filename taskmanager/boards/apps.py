@@ -1,6 +1,8 @@
+"""Boards app configuration module."""
+
 from django.apps import AppConfig
 
 
 class BoardsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
+    """Django app configuration for the boards app."""
     name = 'boards'

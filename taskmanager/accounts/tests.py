@@ -1,13 +1,22 @@
+"""
+This module contains tests for the accounts app.
+It includes tests for user authentication and user management.
+"""
+
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
+
 class AccountTests(TestCase):
-    def setUp(self):
+    """Test cases for account functionality including login and signup."""
+
+    def set_up(self):
+        """Set up test data including test client and user."""
         self.client = Client()
-        self.User = get_user_model()
+        self.user_model = get_user_model()
         # This creates a test user
-        self.test_user = self.User.objects.create_user(
+        self.test_user = self.user_model.objects.create_user(
             username='testuser',
             password='testpass123'
         )
@@ -32,7 +41,7 @@ class AccountTests(TestCase):
             'username': 'testuser',
             'password': 'wrongpass'
         })
-        self.assertEqual(response.status_code, 200)  
+        self.assertEqual(response.status_code, 200)
 
     def test_signup_page(self):
         """Test that signup page loads correctly"""
@@ -49,5 +58,5 @@ class AccountTests(TestCase):
         })
         self.assertRedirects(response, reverse('board'))
         self.assertTrue(
-            self.User.objects.filter(username='newuser').exists()
+            self.user_model.objects.filter(username='newuser').exists()
         )

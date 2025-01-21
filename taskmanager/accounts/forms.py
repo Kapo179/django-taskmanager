@@ -9,7 +9,21 @@ class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # password help text
+        # Field labels and IDs for accessibility
+        self.fields['username'].widget.attrs.update({
+            'id': 'id_signup_username',
+            'aria-label': 'Username'
+        })
+        self.fields['password1'].widget.attrs.update({
+            'id': 'id_signup_password1',
+            'aria-label': 'Password'
+        })
+        self.fields['password2'].widget.attrs.update({
+            'id': 'id_signup_password2',
+            'aria-label': 'Password confirmation'
+        })
+        
+        # Update help texts
         self.fields['password1'].help_text = format_html(
             """
             <ul>
@@ -19,7 +33,5 @@ class CustomUserCreationForm(UserCreationForm):
             </ul>
             """
         )
-        # help text for username field 
         self.fields['username'].help_text = "Letters, digits and @/./+/-/_ "
-        # help text from password2 field 
         self.fields['password2'].help_text = "Enter the same password as before, for verification." 

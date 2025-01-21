@@ -10,7 +10,6 @@ class TaskModelTest(TestCase):
             username='testuser',
             password='12345'
         )
-        
         # this creates a default status
         self.status = Status.objects.create(name="To Do")
 

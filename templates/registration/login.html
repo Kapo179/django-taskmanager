@@ -1,142 +1,152 @@
+<!DOCTYPE html>
 {% extends 'base.html' %}
 
 {% block content %}
-<div id="auth-modal" class="auth-modal">
-    <div class="modal-wrapper">
-        <!--This is initial modal box that contains the login form-->
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>Sign in to Task Manager</h3>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="{% url 'login' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" required>
-                    </div>
-                    <button type="submit">Login</button>
-                    <!--This allows the users to sign up if they don't have an account-->
-                    <div class="signup-link">
-                        Not registered? <a href="{% url 'signup' %}">Create account</a>
-                    </div>
-                </form>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Task Manager</title>
+</head>
+<body>
+    <div id="auth-modal" class="auth-modal">
+        <div class="modal-wrapper">
+            <!--This is initial modal box that contains the login form-->
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3>Sign in to Task Manager</h3>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label id="username-label" for="id_username">Username</label>
+                            <input type="text" name="username" id="id_username" aria-labelledby="username-label" required>
+                        </div>
+                        <div class="form-group">
+                            <label id="password-label" for="id_password">Password</label>
+                            <input type="password" name="password" id="id_password" aria-labelledby="password-label" required>
+                        </div>
+                        <button type="submit">Login</button>
+                        <!--This allows the users to sign up if they don't have an account-->
+                        <div class="signup-link">
+                            Not registered? <a href="{% url 'signup' %}">Create account</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<style>
-    /* This is the CSS for the login modal */
-.auth-modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #f3f4f6;
-    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
-}
+    <style>
+        /* This is the CSS for the login modal */
+        .auth-modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f3f4f6;
+            font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
-.modal-wrapper {
-    width: 90%;
-    max-width: 400px;
-}
+        .modal-wrapper {
+            width: 90%;
+            max-width: 400px;
+        }
 
-.modal-box {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+        .modal-box {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
-.modal-header {
-    padding: 16px;
-    border-bottom: 1px solid #e5e7eb;
-}
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
 
-.modal-header h3 {
-    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 600;
-    font-size: 20px;
-    color: #111827;
-}
+        .modal-header h3 {
+            font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            color: #111827;
+        }
 
-.modal-body {
-    padding: 16px;
-}
+        .modal-body {
+            padding: 16px;
+        }
 
-.form-group {
-    margin-bottom: 16px;
-}
+        .form-group {
+            margin-bottom: 16px;
+        }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 500;
-}
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
 
-.form-group input {
-    width: calc(100% - 16px);
-    padding: 8px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
-}
+        .form-group input {
+            width: calc(100% - 16px);
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
-button {
-    width: 100%;
-    padding: 8px;
-    background: #212121;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    margin-bottom: 16px;
-    cursor: pointer;
-    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-}
+        button {
+            width: 100%;
+            padding: 8px;
+            background: #212121;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+        }
 
-.signup-link {
-    text-align: center;
-    font-size: 14px;
-}
+        .signup-link {
+            text-align: center;
+            font-size: 14px;
+        }
 
-.signup-link a {
-    color: #2d5079;
-    text-decoration: none;
-    font-weight: 500;
-}
+        .signup-link a {
+            color: #2d5079;
+            text-decoration: none;
+            font-weight: 500;
+        }
 
-.signup-link a:hover {
-    text-decoration: underline;
-}
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
 
-/* Style the form paragraphs for signup form */
-form p {
-    margin-bottom: 16px;
-    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
-}
+        /* Style the form paragraphs for signup form */
+        form p {
+            margin-bottom: 16px;
+            font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
-form p label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 500;
-}
+        form p label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
 
-form p input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-</style>
-{% endblock %} 
+        form p input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+    </style>
+</body>
+</html>
+{% endblock %}
