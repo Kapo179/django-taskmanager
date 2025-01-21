@@ -13,7 +13,7 @@ class Status(models.Model):
     Each Status represents a column that tasks can be placed in,
     such as "To Do", "In Progress", or "Done".
     """
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         """Return string representation of the status."""
@@ -44,7 +44,7 @@ class Task(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
-    )
+    )the
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
