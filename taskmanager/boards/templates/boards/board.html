@@ -29,7 +29,7 @@
                 <h5>{{ task.title }}</h5>
                 <button class="delete-task" data-task-id="{{ task.id }}">×</button>
               </div>
-              <p>{{ task.description }}</p>
+              <p class="task-description" onclick="openTaskDetails('{{ task.title }}', '{{ task.description }}')" style="cursor: pointer;">{{ task.description }}</p>
             </div>
           {% endif %}
         {% endfor %}
@@ -46,7 +46,7 @@
                 <h5>{{ task.title }}</h5>
                 <button class="delete-task" data-task-id="{{ task.id }}">×</button>
               </div>
-              <p>{{ task.description }}</p>
+              <p class="task-description" onclick="openTaskDetails('{{ task.title }}', '{{ task.description }}')" style="cursor: pointer;">{{ task.description }}</p>
             </div>
           {% endif %}
         {% endfor %}
@@ -63,7 +63,7 @@
                 <h5>{{ task.title }}</h5>
                 <button class="delete-task" data-task-id="{{ task.id }}">×</button>
               </div>
-              <p>{{ task.description }}</p>
+              <p class="task-description" onclick="openTaskDetails('{{ task.title }}', '{{ task.description }}')" style="cursor: pointer;">{{ task.description }}</p>
             </div>
           {% endif %}
         {% endfor %}
@@ -115,6 +115,26 @@
     </div>
 </div>
 
+<!-- Task Details Modal -->
+<div class="modal fade" id="taskDetailsModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="taskDetailsModalLabel">Task Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h6 id="modalTaskTitle"></h6>
+        <p id="modalTaskDescription"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Here's the CSS for the kanban board-->
 <style>
@@ -568,5 +588,11 @@ document.querySelectorAll('.delete-task').forEach(button => {
         }
     });
 });
+
+function openTaskDetails(title, description) {
+    document.getElementById('modalTaskTitle').textContent = title;
+    document.getElementById('modalTaskDescription').textContent = description;
+    $('#taskDetailsModal').modal('show');
+}
 </script>
 {% endblock %}
