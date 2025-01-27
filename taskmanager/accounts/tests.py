@@ -29,7 +29,6 @@ class AccountTests(TestCase):
 
     def test_login_success(self):
         """Test successful login"""
-
         response = self.client.post(reverse('login'), {
             'username': 'testuser',
             'password': 'testpass123'
