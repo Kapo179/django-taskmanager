@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>KanDo</title>
+    {% load static %}
     <style>
         /* Add SF Compact Display font */
         @font-face {
@@ -15,6 +16,7 @@
             display: flex;
             justify-content: flex-end;
             padding: 1rem;
+            position: relative;
         }
 
         /* Simple logout button */
@@ -25,9 +27,28 @@
             padding: 8px 16px;
             font-size: 14px;
         }
+
+        /* Add logo styles */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
     </style>
 </head>
 <body>
+    <div class="logo-container">
+        <img src="{% static 'images/Logo.png' %}" alt="KanDo Logo" class="logo">
+    </div>
+    
     {% if user.is_authenticated and request.path != '/accounts/login/' and request.path != '/signup/' %}
         <div class="top-nav">
             <a href="{% url 'logout' %}" class="logout-link">Logout</a>
