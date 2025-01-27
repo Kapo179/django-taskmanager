@@ -11,7 +11,7 @@ from django.contrib.auth import get_user_model
 class AccountTests(TestCase):
     """Test cases for account functionality including login and signup."""
 
-    def set_up(self):
+    def setUp(self):
         """Set up test data including test client and user."""
         self.client = Client()
         self.user_model = get_user_model()
@@ -29,10 +29,11 @@ class AccountTests(TestCase):
 
     def test_login_success(self):
         """Test successful login"""
+
         response = self.client.post(reverse('login'), {
             'username': 'testuser',
             'password': 'testpass123'
-        })
+        }, follow=True)
         self.assertRedirects(response, reverse('board'))
 
     def test_login_failure(self):
