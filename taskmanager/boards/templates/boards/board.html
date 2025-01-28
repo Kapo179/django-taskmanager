@@ -216,7 +216,7 @@ h2 {
 }
 
 .task-description {
-    color: #4b5563;
+    color: #4A5568;
     font-size: 0.875rem;
     margin-bottom: auto;
     flex-grow: 1;
@@ -237,7 +237,7 @@ h2 {
 }
 
 .metadata-text {
-    color: #6c757d;
+    color: #4A5568;
     font-size: 12px;
     letter-spacing: -0.2px;
 }
@@ -306,7 +306,7 @@ h2 {
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: #6b7280;
+    color: #4A5568;
 }
 
 .modal-form {
@@ -428,7 +428,7 @@ h2 {
 .info-container .subheading {
     font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 300;
-    color: #6B7280;
+    color: #4A5568;
     font-size: 1rem;
 }
 
@@ -467,7 +467,7 @@ h2 {
 .kanban-card p {
     font-weight: 400;
     font-size: 14px;
-    color: #718096;
+    color: #4A5568;
     margin: 0;
     line-height: 1.4;
 }
@@ -805,6 +805,43 @@ label {
 .priority-high {
     background-color: #FFEBEE;
     color: #C62828;
+}
+
+/* Ensure all text content has sufficient contrast */
+.ql-editor p {
+    color: #4A5568 !important; /* Force better contrast for Quill editor content */
+}
+
+/* Update button and interactive element colors for better contrast */
+.btn-add-update {
+    color: #2D3748; /* Darker color for better contrast */
+}
+
+.back-link {
+    color: #4A5568; /* Darker gray for better contrast */
+}
+
+.back-link:hover {
+    color: #2D3748;
+}
+
+/* Ensure form labels have sufficient contrast */
+.form-group label {
+    color: #2D3748;
+}
+
+/* Update modal text colors */
+.modal-header h3 {
+    color: #1A202C;
+}
+
+.close-modal {
+    color: #4A5568;
+}
+
+/* Ensure task titles have good contrast */
+.card-title {
+    color: #1A202C !important; /* Very dark gray, almost black */
 }
 </style>
 
