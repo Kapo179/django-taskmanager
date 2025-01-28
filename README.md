@@ -1,4 +1,6 @@
 # KanDo
+![Frame 1 (2)](https://github.com/user-attachments/assets/0dd97852-2d6d-4205-8591-5dde1c46f69c)
+
 
 A Django-based productivity application that helps users organize, track, and manage their tasks efficiently, complete with a visually appealing Kanban board and rich text editing for task details.
 
@@ -161,8 +163,7 @@ Throughout the project, we followed an Agile methodology, breaking the developme
   - `[commit-hash]`: **Add Task and Project models** featuring fields for titles, descriptions, due dates, and user associations.
   - `[commit-hash]`: **Set up user login/logout** with custom authentication templates.
 
-> *Comment highlight:*  
-> *“Setting up the foundation so subsequent sprints can focus on building advanced features without refactoring core structures.”*
+
 
 ### Sprint 2: CRUD Features & Basic UI
 - **Duration**: 1 week
@@ -175,8 +176,6 @@ Throughout the project, we followed an Agile methodology, breaking the developme
   - `[commit-hash]`: **Add Bootstrap** for styling the base templates and form elements.
   - `[commit-hash]`: **Create a dashboard** pulling tasks by due date, assigned user, and status.
 
-> *Comment highlight:*  
-> *“The CRUD functionality looks great, but we need a more intuitive way to visualize tasks—a Kanban board might be perfect in the next sprint!”*
 
 ### Sprint 3: Kanban Board & Rich Text Editing
 - **Duration**: 2 weeks
@@ -189,8 +188,6 @@ Throughout the project, we followed an Agile methodology, breaking the developme
   - `[commit-hash]`: **Integrate Quill.js** enabling formatted task descriptions, images, and links.
   - `[commit-hash]`: **Refactor views** into class-based views for better maintainability and easier updates to Kanban statuses.
 
-> *Comment highlight:*  
-> *“Kanban board in place—users can drag tasks between columns, saving automatically. Quill integration looks smooth; final testing next!”*
 
 ### Sprint 4: Testing & Deployment Preparations
 - **Duration**: 1 week
@@ -221,13 +218,20 @@ Throughout the project, we followed an Agile methodology, breaking the developme
 ## Testing
 
 ### Automated Tests
-*(If you have automated tests, detail them here.)*
+
 - **Unit Tests**  
   - `test_models.py`: verifies Task model logic, deadlines, etc.  
   - `test_views.py`: checks view responses, redirects, and permissions.
 
 - **Integration Tests**  
-  - End-to-end checks (e.g., creating a task, editing it, moving it on the board).
+
+taskmanager/boards/templates/boards/board.html
+![image](https://github.com/user-attachments/assets/92f8c0e1-4723-428e-b01b-fa8d3b06113e)
+
+taskmanager/boards/templates/boards/task_detail.html
+![image](https://github.com/user-attachments/assets/5304cdf9-39fa-4219-84b1-8c2b0b48943c)
+
+
 
 ### Manual Testing & Screenshots
 - **Browser-Based Checks**  
@@ -318,7 +322,7 @@ taskmanager/boards/urls.py
 - **Deployment Steps**:
   1. Create an account on the chosen platform.
   2. Clone the repository and push to a new remote (if required).
-  3. Set required environment variables (`SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, etc.).
+  3. Set required environment variables (`SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, `DATABASE_URL`, etc.).
   4. Run migrations and collect static files.
   5. Confirm build/deployment logs for success.
 
@@ -347,7 +351,7 @@ https://www.figma.com/community/file/892825410260715717/simple-kanban-board - UI
 https://www.figma.com/community/file/1291667577858062539/kanban-board-task-management
 https://www.figma.com/community/file/1209724056553648259/website-wireframes-ui-kit-vol-1 - for wireframes and UI
 
-We utilised ChatGPT, Github Copilot
+We utilised ChatGPT, Github Copilot, Here's an Example of AI-Usage to assist with my linting close to deadline.
 
 ![image](https://github.com/user-attachments/assets/c24aaf7c-6f7e-4b93-ab6e-b0bb49e5a6f9)
 
