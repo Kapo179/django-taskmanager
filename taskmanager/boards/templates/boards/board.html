@@ -2,6 +2,19 @@
 {% extends "base.html" %}
 {% load static %}
 
+<!-- Dependencies in the head section -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<!-- jQuery UI CSS -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<!-- Add Bootstrap Datepicker CSS in head section -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+<!-- Add jQuery before Bootstrap Datepicker -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
 {% block content %}
 <div class="container my-4">
   <div class="info-container">
@@ -19,17 +32,57 @@
     <div class="kanban-column">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <span class="column-header not-started">Not Started</span>
-        <button class="add-task-btn" style="color: #6B7280; background: none; border: none; cursor: pointer;">+ Add Task</button>
+            <button class="add-task-btn" style="color: #6B7280; background: none; border: none; cursor: pointer;">+ Add
+                Task</button>
       </div>
       <div class="task-list" data-status="not-started">
         {% for task in tasks %}
           {% if task.status.name == "not-started" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-              <div class="card-header">
-                <h5>{{ task.title }}</h5>
-                <button class="delete-task" data-task-id="{{ task.id }}">×</button>
-              </div>
-              <p>{{ task.description }}</p>
+                <div class="card-content p-3">
+                    <!-- Header with title and priority -->
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            {% if task.tag %}
+                                <span class="priority-tag 
+                                    {% if task.tag == '!' %}priority-low
+                                    {% elif task.tag == '!!' %}priority-medium
+                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                                    {{ task.tag }}
+                                </span>
+                            {% endif %}
+                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
+                                <h5 class="card-title mb-0">{{ task.title }}</h5>
+                            </a>
+                        </div>
+                        <button class="delete-task" data-task-id="{{ task.id }}">
+                            <span class="delete-emoji">🗑️</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="task-description mb-3 ql-editor" style="padding: 0;">
+                        {{ task.description|safe|truncatewords_html:30 }}
+                    </div>
+                    
+                    <!-- Metadata Footer -->
+                    <div class="task-metadata d-flex justify-content-between align-items-center">
+                        <!-- Left side metadata -->
+                        <div class="d-flex align-items-center gap-3">
+                            {% if task.duedate %}
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">📅</span>
+                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">⏰</span>
+                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
           {% endif %}
         {% endfor %}
@@ -42,11 +95,50 @@
         {% for task in tasks %}
           {% if task.status.name == "doing" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-              <div class="card-header">
-                <h5>{{ task.title }}</h5>
-                <button class="delete-task" data-task-id="{{ task.id }}">×</button>
-              </div>
-              <p>{{ task.description }}</p>
+                <div class="card-content p-3">
+                    <!-- Header with title and priority -->
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            {% if task.tag %}
+                                <span class="priority-tag 
+                                    {% if task.tag == '!' %}priority-low
+                                    {% elif task.tag == '!!' %}priority-medium
+                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                                    {{ task.tag }}
+                                </span>
+                            {% endif %}
+                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
+                                <h5 class="card-title mb-0">{{ task.title }}</h5>
+                            </a>
+                        </div>
+                        <button class="delete-task" data-task-id="{{ task.id }}">
+                            <span class="delete-emoji">🗑️</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="task-description mb-3 ql-editor" style="padding: 0;">
+                        {{ task.description|safe|truncatewords_html:30 }}
+                    </div>
+                    
+                    <!-- Metadata Footer -->
+                    <div class="task-metadata d-flex justify-content-between align-items-center">
+                        <!-- Left side metadata -->
+                        <div class="d-flex align-items-center gap-3">
+                            {% if task.duedate %}
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">📅</span>
+                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">⏰</span>
+                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
           {% endif %}
         {% endfor %}
@@ -59,11 +151,50 @@
         {% for task in tasks %}
           {% if task.status.name == "done" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-              <div class="card-header">
-                <h5>{{ task.title }}</h5>
-                <button class="delete-task" data-task-id="{{ task.id }}">×</button>
-              </div>
-              <p>{{ task.description }}</p>
+                <div class="card-content p-3">
+                    <!-- Header with title and priority -->
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            {% if task.tag %}
+                                <span class="priority-tag 
+                                    {% if task.tag == '!' %}priority-low
+                                    {% elif task.tag == '!!' %}priority-medium
+                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                                    {{ task.tag }}
+                                </span>
+                            {% endif %}
+                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
+                                <h5 class="card-title mb-0">{{ task.title }}</h5>
+                            </a>
+                        </div>
+                        <button class="delete-task" data-task-id="{{ task.id }}">
+                            <span class="delete-emoji">🗑️</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="task-description mb-3 ql-editor" style="padding: 0;">
+                        {{ task.description|safe|truncatewords_html:30 }}
+                    </div>
+                    
+                    <!-- Metadata Footer -->
+                    <div class="task-metadata d-flex justify-content-between align-items-center">
+                        <!-- Left side metadata -->
+                        <div class="d-flex align-items-center gap-3">
+                            {% if task.duedate %}
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">📅</span>
+                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">⏰</span>
+                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
           {% endif %}
         {% endfor %}
@@ -93,8 +224,24 @@
                         <input type="text" id="taskTitle" name="title" required>
                     </div>
                     <div class="form-group">
-                        <label for="taskDescription">Description</label>
+                        <label for="taskDescription">Task Details</label>
                         <textarea id="taskDescription" name="description" rows="4"></textarea>
+                    </div>
+                    <!-- Add Priority Tag select before Due Date input -->
+                    <div class="form-group">
+                        <label for="taskTag">Priority</label>
+                        <select id="taskTag" name="tag" class="form-control">
+                            <option value="">No Priority</option>
+                            <option value="!">! Low Priority</option>
+                            <option value="!!">!! Medium Priority</option>
+                            <option value="!!!">!!! High Priority</option>
+                        </select>
+                    </div>
+                    <!-- Add Due Date input -->
+                    <div class="form-group">
+                        <label for="taskDueDate">Due Date</label>
+                        <input type="date" class="form-control custom-date-input" id="taskDueDate" name="duedate" 
+                               min="{% now 'Y-m-d' %}" required>
                     </div>
                     <div class="form-group">
                         <label for="taskStatus">Status</label>
@@ -183,35 +330,69 @@ h2, h5 {
 .kanban-card {
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 16px;
     border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    margin-bottom: 12px;
+    overflow: hidden;
 }
 
-.column-header {
-    display: inline-block;
-    padding: 8px 16px;
-    border-radius: 20px;
+.card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-title {
+    font-size: 15px;
+    color: #2D3748;
+}
+
+.task-description {
+    color: #4b5563;
+    font-size: 0.875rem;
+    margin-bottom: auto;
+    flex-grow: 1;
+}
+
+/* Update metadata styles */
+.task-metadata {
+    padding: 8px 0;
+    border-top: 1px solid #f0f0f0;
+    margin-top: auto;
+}
+
+.metadata-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+}
+
+.metadata-text {
+    color: #6c757d;
+    font-size: 12px;
+    letter-spacing: -0.2px;
+}
+
+.metadata-emoji {
     font-size: 14px;
-    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 600;
-    margin-bottom: 16px;
 }
 
-.not-started {
-    background-color: #E1E4E8;
-    color: #6B7280;
+.delete-emoji {
+    font-size: 13px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
 }
 
-.doing {
-    background-color: #F0E7F6;
-    color: #7B777E;
+.delete-task {
+    background: none;
+    border: none;
+    padding: 4px;
+    margin: -4px;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
-.done {
-    background-color: #FFDCE0;
-    color: #837173;
+.delete-task:hover .delete-emoji {
+    opacity: 1;
 }
 
 .task-modal {
@@ -380,11 +561,30 @@ h2, h5 {
     color: #6B7280;
 }
 
-
 .column-header {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 600;
+    margin-bottom: 16px;
 }
 
+.not-started {
+    background-color: #E1E4E8;
+    color: #6B7280;
+}
+
+.doing {
+    background-color: #F0E7F6;
+    color: #7B777E;
+}
+
+.done {
+    background-color: #FFDCE0;
+    color: #837173;
+}
 
 .kanban-card h5 {
     font-weight: 600;
@@ -393,7 +593,6 @@ h2, h5 {
     color: #2D3748;
 }
 
-
 .kanban-card p {
     font-weight: 400;
     font-size: 14px;
@@ -401,7 +600,6 @@ h2, h5 {
     margin: 0;
     line-height: 1.4;
 }
-
 
 .modal-header h3 {
     font-weight: 600;
@@ -438,25 +636,304 @@ h2, h5 {
 }
 
 .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 4px;
+    padding: 0.75rem;
+    background: transparent;
+    border-bottom: none;
 }
 
-.delete-task {
+.card-body {
+    padding: 0.5rem 1rem 1rem;
+}
+
+/* Timeline Styles */
+ul.timeline-3 {
+    list-style-type: none;
+    position: relative;
+    padding-left: 0;
+}
+
+ul.timeline-3:before {
+    content: " ";
+    background: #d4d9df;
+    display: inline-block;
+    position: absolute;
+    left: 29px;
+    width: 2px;
+    height: 100%;
+    z-index: 400;
+}
+
+ul.timeline-3 > li {
+    margin: 20px 0;
+    padding-left: 60px;
+    position: relative;
+}
+
+ul.timeline-3 > li:before {
+    content: " ";
+    background: white;
+    display: inline-block;
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid #22c0e8;
+    left: 20px;
+    width: 20px;
+    height: 20px;
+    z-index: 400;
+}
+
+ul.timeline-3 > li:first-child:before {
+    border-color: #28a745;
+}
+
+.timeline-content {
+    padding: 5px 0;
+}
+
+.timeline-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+/* Form Controls */
+.form-select-sm {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.priority-tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Modal Styles */
+.modal-content {
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal-header {
+    padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+}
+
+.task-detail-section label {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+}
+
+.form-control-plaintext {
+    padding: 0;
+    font-size: 1.5rem;
+    color: #2d3748;
+}
+
+.form-control-plaintext:focus {
+    outline: none;
+}
+
+.edit-task-btn {
+    color: #6c757d;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+}
+
+.edit-task-btn:hover {
+    color: #0d6efd;
+    opacity: 1;
+}
+
+/* Update button styles to match task creation modal */
+.btn-close-modal {
     background: none;
-    border: none;
-    color: #9CA3AF;
-    font-size: 18px;
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #6b7280;
     cursor: pointer;
-    padding: 0 4px;
-    margin: -4px -4px 0 0;
-    line-height: 1;
+    transition: all 0.2s ease;
 }
 
-.delete-task:hover {
-    color: #EF4444;
+.btn-close-modal:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.btn-submit {
+    background: #212121;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+    background: #424242;
+}
+
+/* Remove old button styles */
+.btn-light, .btn-primary {
+    display: none;
+}
+
+/* Add SF Compact Display font */
+@font-face {
+    font-family: 'SF Compact Display';
+    src: url('https://sf.abarba.me/SF-Compact-Display-Regular.otf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'SF Compact Display';
+    src: url('https://sf.abarba.me/SF-Compact-Display-Semibold.otf');
+    font-weight: 600;
+}
+
+/* Apply SF Compact Display to modal elements */
+.font-sf-compact {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+#taskDetailsModal {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Remove all borders and backgrounds from title input */
+#modalTaskTitle {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+#modalTaskTitle:focus,
+#modalTaskTitle:active,
+#modalTaskTitle:hover {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+}
+
+/* Override any Bootstrap form-control styles */
+.form-control-plaintext,
+.form-control-lg {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Apply SF Compact Display to all modal text */
+.modal-content,
+.modal-title,
+.modal-body,
+.form-control,
+.form-select,
+.btn,
+.text-muted,
+.timeline-title,
+label {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Simple Timeline Style */
+.timeline-simple {
+    border-left: 2px solid #e5e7eb;
+    padding-left: 1rem;
+    margin-left: 0.5rem;
+}
+
+.timeline-simple .entry {
+    position: relative;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+}
+
+.timeline-simple .entry::before {
+    content: '';
+    position: absolute;
+    left: -0.35rem;
+    top: 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #fff;
+    border: 2px solid #6B7280;
+    border-radius: 50%;
+}
+
+.entry-content {
+    background: #f9fafb;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.entry-date {
+    font-size: 0.75rem;
+    color: #6B7280;
+}
+
+/* Add custom styling for the date input */
+.custom-date-input {
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #f9fafb;
+    width: 100%;
+    font-family: inherit;
+    font-size: 0.875rem;
+}
+
+.custom-date-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6;
+}
+
+/* Priority Tag Styles */
+.priority-tag {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.priority-low {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+}
+
+.priority-medium {
+    background-color: #FFF3E0;
+    color: #EF6C00;
+}
+
+.priority-high {
+    background-color: #FFEBEE;
+    color: #C62828;
 }
 </style>
 
@@ -568,5 +1045,369 @@ document.querySelectorAll('.delete-task').forEach(button => {
         }
     });
 });
+
+function openTaskDetails(title, description, tag, dueDate, createdAt, updatedAt, status) {
+    // Set title with plaintext input
+    const titleInput = document.getElementById('modalTaskTitle');
+    titleInput.value = title;
+    
+    // Set description
+    document.getElementById('modalTaskDescription').textContent = description || 'No description';
+    
+    // Set priority tag with proper styling
+    const tagElement = document.getElementById('modalTaskTag');
+    tagElement.textContent = tag || 'No priority';
+    tagElement.className = 'priority-tag ' + (
+        tag === '!' ? 'priority-low' :
+        tag === '!!' ? 'priority-medium' :
+        tag === '!!!' ? 'priority-high' : ''
+    );
+    
+    // Set due date with proper formatting
+    document.getElementById('modalTaskDueDate').textContent = 
+        dueDate === 'No due date' ? 'No due date set' : new Date(dueDate).toLocaleDateString();
+    
+    // Set created date
+    document.getElementById('modalTaskCreatedAt').textContent = 
+        new Date(createdAt).toLocaleDateString();
+    
+    // Set status
+    const statusSelect = document.getElementById('modalTaskStatusSelect');
+    statusSelect.value = status.toLowerCase();
+    document.getElementById('modalTaskStatus').textContent = status;
+    
+    // Set created and updated times in timeline
+    document.getElementById('modalTaskCreatedAtTime').textContent = 
+        new Date(createdAt).toLocaleString();
+    document.getElementById('modalTaskUpdatedAt').textContent = 
+        new Date(updatedAt).toLocaleString();
+    
+    // Store the task ID
+    const taskId = event.currentTarget.closest('.kanban-card').dataset.taskId;
+    document.querySelector('.save-changes-btn').dataset.taskId = taskId;
+    
+    // Show the modal
+    const taskModal = new bootstrap.Modal(document.getElementById('taskDetailsModal'));
+    taskModal.show();
+}
+
+// Handle saving changes
+document.querySelector('.save-changes-btn').addEventListener('click', async function() {
+    const taskId = this.dataset.taskId;
+    const formData = new FormData();
+    
+    // Format data properly before sending
+    formData.append('title', document.getElementById('modalTaskTitle').value);
+    formData.append('description', document.getElementById('modalTaskDescription').textContent);
+    formData.append('status', document.getElementById('modalTaskStatusSelect').value);
+    
+    // Handle tag/priority
+    const tag = document.getElementById('modalTaskTag').textContent;
+    if (tag !== 'No priority') {
+        formData.append('tag', tag);
+    }
+    
+    // Handle due date
+    const dueDate = document.getElementById('modalTaskDueDate').textContent;
+    if (dueDate !== 'No due date set') {
+        const formattedDate = new Date(dueDate).toISOString().split('T')[0];
+        formData.append('duedate', formattedDate);
+    }
+    
+    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+    
+    try {
+        const response = await fetch(`/task/${taskId}/update/`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            console.error('Failed to update task');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+// Handle status changes
+document.getElementById('modalTaskStatusSelect').addEventListener('change', async function(e) {
+    const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
+    const newStatus = e.target.value;
+    
+    const formData = new FormData();
+    formData.append('status', newStatus);
+    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+    
+    try {
+        const response = await fetch(`/task/${taskId}/update/`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            document.getElementById('modalTaskStatus').textContent = newStatus;
+            // Add new timeline entry for status update
+            const timelineList = document.querySelector('.timeline-3');
+            const newStatusItem = document.createElement('li');
+            newStatusItem.innerHTML = `
+                <div class="timeline-content">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="timeline-title">Status Updated</span>
+                        <span class="text-muted small">${new Date().toLocaleString()}</span>
+                    </div>
+                    <p class="text-muted small mb-0">Status changed to <span class="fw-medium">${newStatus}</span></p>
+                </div>
+            `;
+            timelineList.appendChild(newStatusItem);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+// Edit functionality
+document.querySelectorAll('.edit-task-btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+        const field = this.dataset.field;
+        const valueElement = document.getElementById(`modalTask${field.charAt(0).toUpperCase() + field.slice(1)}`);
+        const currentValue = valueElement.textContent.trim();
+        
+        if (field === 'tag') {
+            // Create select element for priority
+            const select = document.createElement('select');
+            select.className = 'form-control form-control-sm';
+            select.innerHTML = `
+                <option value="">No Priority</option>
+                <option value="!">! Low Priority</option>
+                <option value="!!">!! Medium Priority</option>
+                <option value="!!!">!!! High Priority</option>
+            `;
+            select.value = currentValue;
+            
+            valueElement.replaceWith(select);
+            select.focus();
+            
+            const saveEdit = () => {
+                const newValue = select.value;
+                valueElement.textContent = newValue;
+                valueElement.className = `priority-tag ${
+                    newValue === '!' ? 'priority-low' :
+                    newValue === '!!' ? 'priority-medium' :
+                    newValue === '!!!' ? 'priority-high' : ''
+                }`;
+                select.replaceWith(valueElement);
+                
+                // Save to server
+                const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
+                const formData = new FormData();
+                formData.append('tag', newValue);
+                formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+                
+                fetch(`/task/${taskId}/update/`, {
+                    method: 'POST',
+                    body: formData
+                });
+            };
+            
+            select.addEventListener('change', saveEdit);
+            select.addEventListener('blur', saveEdit);
+        } else {
+            // Create input element
+            const input = document.createElement(field === 'description' ? 'textarea' : 'input');
+            input.value = currentValue === 'No due date set' ? '' : currentValue;
+            input.className = 'form-control form-control-sm';
+            
+            // Set specific input attributes based on field type
+            if (field === 'duedate') {
+                input.type = 'date';
+                input.min = new Date().toISOString().split('T')[0]; // Set minimum date to today
+            }
+            
+            // Replace text with input
+            valueElement.replaceWith(input);
+            input.focus();
+            
+            // Handle save on enter or blur
+            const saveEdit = () => {
+                const newValue = input.value;
+                // Format the date for display if it's a date field
+                const displayValue = field === 'duedate' 
+                    ? (newValue ? new Date(newValue).toISOString().split('T')[0] : 'No due date set')
+                    : newValue;
+                
+                valueElement.textContent = displayValue;
+                input.replaceWith(valueElement);
+                
+                // Add the save functionality here
+                const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
+                const formData = new FormData();
+                formData.append(field, newValue);
+                formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+                
+                fetch(`/task/${taskId}/update/`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Failed to update task');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            };
+            
+            input.addEventListener('blur', saveEdit);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && field !== 'description') {
+                    saveEdit();
+                }
+            });
+        }
+    });
+});
+
+function showAddEventForm() {
+    const timelineContainer = document.querySelector('.vertical-timeline');
+    const addEventBtn = document.querySelector('.add-event-btn').closest('.vertical-timeline-element');
+    
+    const eventForm = document.createElement('div');
+    eventForm.className = 'vertical-timeline-item vertical-timeline-element';
+    eventForm.innerHTML = `
+        <div>
+            <span class="vertical-timeline-element-icon bounce-in">
+                <i class="badge badge-dot badge-dot-xl badge-warning"></i>
+            </span>
+            <div class="vertical-timeline-element-content bounce-in">
+                <input type="text" class="form-control form-control-sm mb-2" placeholder="Event Title">
+                <textarea class="form-control form-control-sm mb-2" placeholder="Event Description"></textarea>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-sm btn-secondary me-2" onclick="cancelAddEvent(this)">Cancel</button>
+                    <button class="btn btn-sm btn-primary" onclick="saveNewEvent(this)">Add</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    timelineContainer.insertBefore(eventForm, addEventBtn);
+    addEventBtn.style.display = 'none';
+}
+
+function saveNewEvent(button) {
+    const eventForm = button.closest('.vertical-timeline-element');
+    const title = eventForm.querySelector('input').value;
+    const description = eventForm.querySelector('textarea').value;
+    const date = new Date().toLocaleString();
+    
+    const newEvent = document.createElement('div');
+    newEvent.className = 'vertical-timeline-item vertical-timeline-element';
+    newEvent.innerHTML = `
+        <div>
+            <span class="vertical-timeline-element-icon bounce-in">
+                <i class="badge badge-dot badge-dot-xl badge-primary"></i>
+            </span>
+            <div class="vertical-timeline-element-content bounce-in">
+                <h4 class="timeline-title">${title}</h4>
+                <p>${description}</p>
+                <span class="vertical-timeline-element-date">${date}</span>
+            </div>
+        </div>
+    `;
+    
+    eventForm.replaceWith(newEvent);
+    document.querySelector('.add-event-btn').closest('.vertical-timeline-element').style.display = 'block';
+}
+
+function cancelAddEvent(button) {
+    const eventForm = button.closest('.vertical-timeline-element');
+    document.querySelector('.add-event-btn').closest('.vertical-timeline-element').style.display = 'block';
+    eventForm.remove();
+}
+
+// Initialize tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
+// Update status select when modal opens
+document.getElementById('taskDetailsModal').addEventListener('show.bs.modal', function (event) {
+    const statusSelect = document.getElementById('modalTaskStatusSelect');
+    const currentStatus = document.getElementById('modalTaskStatus').textContent;
+    statusSelect.value = currentStatus.toLowerCase();
+});
+
+// Handle status change
+document.getElementById('modalTaskStatusSelect').addEventListener('change', function(e) {
+    const newStatus = e.target.value;
+    document.getElementById('modalTaskStatus').textContent = newStatus;
+});
+
+// Update modal close behavior
+function closeTaskModal() {
+    const modal = document.getElementById('taskDetailsModal');
+    const backdrop = document.querySelector('.modal-backdrop');
+    
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    
+    if (backdrop) {
+        backdrop.remove();
+    }
+    
+    // Remove modal-open class from body
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('taskDetailsModal');
+    if (e.target === modal) {
+        closeTaskModal();
+    }
+});
+
+// Prevent modal from closing when clicking inside
+document.querySelector('.modal-content').addEventListener('click', (e) => {
+    e.stopPropagation();
+});
+
+function addJournalEntry() {
+    const journalEntries = document.getElementById('journalEntries');
+    const newEntry = document.createElement('div');
+    newEntry.className = 'entry';
+    newEntry.innerHTML = `
+        <div class="entry-content">
+            <div class="entry-date">${new Date().toLocaleString()}</div>
+            <textarea class="form-control form-control-sm mb-2" rows="2" placeholder="Add a note..."></textarea>
+            <div class="d-flex justify-content-end gap-2">
+                <button class="btn btn-sm btn-light" onclick="cancelEntry(this)">Cancel</button>
+                <button class="btn btn-sm btn-dark" onclick="saveEntry(this)">Save</button>
+            </div>
+        </div>
+    `;
+    journalEntries.prepend(newEntry);
+}
+
+function saveEntry(button) {
+    const entryContent = button.closest('.entry-content');
+    const text = entryContent.querySelector('textarea').value;
+    const date = entryContent.querySelector('.entry-date').textContent;
+    
+    entryContent.innerHTML = `
+        <div class="entry-date">${date}</div>
+        <p class="mb-0">${text}</p>
+    `;
+}
+
+function cancelEntry(button) {
+    button.closest('.entry').remove();
+}
 </script>
 {% endblock %}

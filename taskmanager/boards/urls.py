@@ -23,4 +23,6 @@ urlpatterns = [
     path('task/<int:task_id>/delete/',
          views.delete_task,
          name='delete_task'),
+    # Handle task details
+    path('task/<int:task_id>/', views.task_detail, name='task_detail'),
 ]

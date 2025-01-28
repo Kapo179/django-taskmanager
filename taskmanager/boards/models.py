@@ -38,6 +38,13 @@ class Task(models.Model):
     Each task has a title, description, status, assigned user,
     and timestamps for creation and updates.
     """
+    PRIORITY_CHOICES = [
+        ('!', 'Low Priority'),
+        ('!!', 'Medium Priority'),
+        ('!!!', 'High Priority'),
+        ('', 'No Priority')
+    ]
+    
     title = models.CharField(max_length=100)
     description = models.TextField()
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
@@ -45,6 +52,8 @@ class Task(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
+    tag = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='', blank=True)
+    duedate = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
