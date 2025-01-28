@@ -75,3 +75,8 @@ def delete_task(request, task_id):
         task.delete()
         messages.success(request, 'Task deleted successfully!')
     return redirect('board')
+
+@login_required
+def task_detail(request, task_id):
+    task = get_object_or_404(Task, id=task_id, user=request.user)
+    return render(request, 'boards/task_detail.html', {'task': task})

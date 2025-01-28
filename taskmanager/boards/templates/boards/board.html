@@ -30,25 +30,25 @@
     <!-- class="column-header 'not-started' 'doing' 'done' " = targets a specific column -->
 
     <div class="kanban-column">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="column-header not-started">Not Started</span>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="column-header not-started">Not Started</span>
             <button class="add-task-btn" style="color: #6B7280; background: none; border: none; cursor: pointer;">+ Add
                 Task</button>
-        </div>
-        <div class="task-list" data-status="not-started">
-            {% for task in tasks %}
-            {% if task.status.name == "not-started" %}
+      </div>
+      <div class="task-list" data-status="not-started">
+        {% for task in tasks %}
+          {% if task.status.name == "not-started" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
                 <div class="card-content p-3">
                     <!-- Header with title and delete -->
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <button class="task-title-btn" onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)">
+                        <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
                             <h5 class="card-title mb-0">{{ task.title }}</h5>
-                        </button>
+                        </a>
                         <button class="delete-task" data-task-id="{{ task.id }}">
                             <span class="delete-emoji">🗑️</span>
                         </button>
-                    </div>
+                </div>
                     
                     <!-- Description -->
                     <p class="task-description mb-3">{{ task.description }}</p>
@@ -66,7 +66,7 @@
                                     {% elif task.tag == '!!!' %}text-danger{% endif %}">
                                     {{ task.tag }}
                                 </span>
-                            </div>
+              </div>
                             {% endif %}
                             
                             {% if task.duedate %}
@@ -84,27 +84,27 @@
                     </div>
                 </div>
             </div>
-            {% endif %}
-            {% endfor %}
-        </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
 
     <div class="kanban-column">
-        <span class="column-header doing">Doing</span>
-        <div class="task-list" data-status="doing">
-            {% for task in tasks %}
-            {% if task.status.name == "doing" %}
+      <span class="column-header doing">Doing</span>
+      <div class="task-list" data-status="doing">
+        {% for task in tasks %}
+          {% if task.status.name == "doing" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
                 <div class="card-content p-3">
                     <!-- Header with title and delete -->
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <button class="task-title-btn" onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)">
+                        <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
                             <h5 class="card-title mb-0">{{ task.title }}</h5>
-                        </button>
+                        </a>
                         <button class="delete-task" data-task-id="{{ task.id }}">
                             <span class="delete-emoji">🗑️</span>
                         </button>
-                    </div>
+                </div>
                     
                     <!-- Description -->
                     <p class="task-description mb-3">{{ task.description }}</p>
@@ -122,7 +122,7 @@
                                     {% elif task.tag == '!!!' %}text-danger{% endif %}">
                                     {{ task.tag }}
                                 </span>
-                            </div>
+              </div>
                             {% endif %}
                             
                             {% if task.duedate %}
@@ -140,27 +140,27 @@
                     </div>
                 </div>
             </div>
-            {% endif %}
-            {% endfor %}
-        </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
 
     <div class="kanban-column">
-        <span class="column-header done">Done</span>
-        <div class="task-list" data-status="done">
-            {% for task in tasks %}
-            {% if task.status.name == "done" %}
+      <span class="column-header done">Done</span> 
+      <div class="task-list" data-status="done">
+        {% for task in tasks %}
+          {% if task.status.name == "done" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
                 <div class="card-content p-3">
                     <!-- Header with title and delete -->
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <button class="task-title-btn" onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)">
+                        <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
                             <h5 class="card-title mb-0">{{ task.title }}</h5>
-                        </button>
+                        </a>
                         <button class="delete-task" data-task-id="{{ task.id }}">
                             <span class="delete-emoji">🗑️</span>
                         </button>
-                    </div>
+                </div>
                     
                     <!-- Description -->
                     <p class="task-description mb-3">{{ task.description }}</p>
@@ -178,7 +178,7 @@
                                     {% elif task.tag == '!!!' %}text-danger{% endif %}">
                                     {{ task.tag }}
                                 </span>
-                            </div>
+              </div>
                             {% endif %}
                             
                             {% if task.duedate %}
@@ -196,13 +196,13 @@
                     </div>
                 </div>
             </div>
-            {% endif %}
-            {% endfor %}
-        </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
-    </div>
+  </div>
 
-    </div>
+</div>
 
 <!--Here we will add the modal for adding a task-->
 
@@ -271,106 +271,51 @@
 <div class="modal fade" id="taskDetailsModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
-            <!-- Modal Header -->
+            <!-- Modal Header with Title -->
             <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title" id="taskDetailsModalLabel">Task Details</h5>
+                <input type="text" class="form-control-plaintext form-control-lg fw-bold" id="modalTaskTitle" readonly>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <!-- Modal Body -->
             <div class="modal-body pt-2">
-                <!-- Title Section -->
-                <div class="task-detail-section mb-4">
-                    <div class="d-flex align-items-center mb-2">
-                        <input type="text" class="form-control-plaintext form-control-lg fw-bold" id="modalTaskTitle" readonly>
-                        <button class="btn btn-link btn-sm p-0 ms-2 edit-task-btn" data-field="title">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Description Section -->
-                <div class="task-detail-section mb-4">
-                    <label class="text-muted small text-uppercase">Description</label>
-                    <div class="d-flex align-items-start">
-                        <p class="form-text mb-0" id="modalTaskDescription"></p>
-                        <button class="btn btn-link btn-sm p-0 ms-2 edit-task-btn" data-field="description">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Metadata Grid -->
-                <div class="row g-3 mb-4">
-                    <!-- Priority -->
-                    <div class="col-6">
-                        <div class="task-detail-section">
-                            <label class="text-muted small text-uppercase d-block mb-2">Priority</label>
-                            <div class="d-flex align-items-center">
-                                <span id="modalTaskTag" class="priority-tag"></span>
-                                <button class="btn btn-link btn-sm p-0 ms-2 edit-task-btn" data-field="tag">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Due Date -->
-                    <div class="col-6">
-                        <div class="task-detail-section">
-                            <label class="text-muted small text-uppercase d-block mb-2">Due Date</label>
-                            <div class="d-flex align-items-center">
-                                <span id="modalTaskDueDate" class="text-body"></span>
-                                <button class="btn btn-link btn-sm p-0 ms-2 edit-task-btn" data-field="duedate">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Status -->
-                    <div class="col-6">
-                        <div class="task-detail-section">
-                            <label class="text-muted small text-uppercase d-block mb-2">Status</label>
-                            <select class="form-select form-select-sm" id="modalTaskStatusSelect">
+                <!-- Task Summary Box -->
+                <div class="task-summary p-3 bg-light rounded mb-4">
+                    <div class="d-flex gap-3 mb-2">
+                        <div>
+                            <span class="text-muted small">Status</span>
+                            <select class="form-select form-select-sm mt-1" id="modalTaskStatusSelect">
                                 <option value="not-started">Not Started</option>
                                 <option value="doing">Doing</option>
                                 <option value="done">Done</option>
                             </select>
                         </div>
-                    </div>
-
-                    <!-- Created Date -->
-                    <div class="col-6">
-                        <div class="task-detail-section">
-                            <label class="text-muted small text-uppercase d-block mb-2">Created</label>
-                            <span id="modalTaskCreatedAt" class="text-body"></span>
+                        <div>
+                            <span class="text-muted small">Priority</span>
+                            <div class="mt-1" id="modalTaskTag"></div>
                         </div>
+                        <div>
+                            <span class="text-muted small">Due Date</span>
+                            <div class="mt-1" id="modalTaskDueDate"></div>
+                        </div>
+                    </div>
+                    <div class="description-section">
+                        <span class="text-muted small">Description</span>
+                        <p class="form-text mb-0 mt-1" id="modalTaskDescription"></p>
                     </div>
                 </div>
 
-                <!-- Activity Timeline -->
-                <div class="task-detail-section">
-                    <label class="text-muted small text-uppercase d-block mb-3">Activity</label>
-                    <ul class="timeline-3">
-                        <li>
-                            <div class="timeline-content">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="timeline-title">Task Created</span>
-                                    <span class="text-muted small" id="modalTaskCreatedAtTime"></span>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="timeline-content">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="timeline-title">Status Updated</span>
-                                    <span class="text-muted small" id="modalTaskUpdatedAt"></span>
-                                </div>
-                                <p class="text-muted small mb-0">Status changed to <span id="modalTaskStatus" class="fw-medium"></span></p>
-                            </div>
-                        </li>
-                    </ul>
+                <!-- Journal Section -->
+                <div class="journal-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">Notes</h6>
+                        <button class="btn btn-sm btn-light" onclick="addJournalEntry()">
+                            Add Note
+                        </button>
+                    </div>
+                    <div id="journalEntries" class="timeline-simple">
+                        <!-- Journal entries will be added here -->
+                    </div>
                 </div>
             </div>
 
@@ -911,6 +856,110 @@ ul.timeline-3 > li:first-child:before {
 .btn-light, .btn-primary {
     display: none;
 }
+
+/* Add SF Compact Display font */
+@font-face {
+    font-family: 'SF Compact Display';
+    src: url('https://sf.abarba.me/SF-Compact-Display-Regular.otf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'SF Compact Display';
+    src: url('https://sf.abarba.me/SF-Compact-Display-Semibold.otf');
+    font-weight: 600;
+}
+
+/* Apply SF Compact Display to modal elements */
+.font-sf-compact {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+#taskDetailsModal {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Remove all borders and backgrounds from title input */
+#modalTaskTitle {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+#modalTaskTitle:focus,
+#modalTaskTitle:active,
+#modalTaskTitle:hover {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+}
+
+/* Override any Bootstrap form-control styles */
+.form-control-plaintext,
+.form-control-lg {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Apply SF Compact Display to all modal text */
+.modal-content,
+.modal-title,
+.modal-body,
+.form-control,
+.form-select,
+.btn,
+.text-muted,
+.timeline-title,
+label {
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Simple Timeline Style */
+.timeline-simple {
+    border-left: 2px solid #e5e7eb;
+    padding-left: 1rem;
+    margin-left: 0.5rem;
+}
+
+.timeline-simple .entry {
+    position: relative;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+}
+
+.timeline-simple .entry::before {
+    content: '';
+    position: absolute;
+    left: -0.35rem;
+    top: 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #fff;
+    border: 2px solid #6B7280;
+    border-radius: 50%;
+}
+
+.entry-content {
+    background: #f9fafb;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.entry-date {
+    font-size: 0.75rem;
+    color: #6B7280;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -1322,5 +1371,68 @@ document.getElementById('modalTaskStatusSelect').addEventListener('change', func
     const newStatus = e.target.value;
     document.getElementById('modalTaskStatus').textContent = newStatus;
 });
+
+// Update modal close behavior
+function closeTaskModal() {
+    const modal = document.getElementById('taskDetailsModal');
+    const backdrop = document.querySelector('.modal-backdrop');
+    
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    
+    if (backdrop) {
+        backdrop.remove();
+    }
+    
+    // Remove modal-open class from body
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('taskDetailsModal');
+    if (e.target === modal) {
+        closeTaskModal();
+    }
+});
+
+// Prevent modal from closing when clicking inside
+document.querySelector('.modal-content').addEventListener('click', (e) => {
+    e.stopPropagation();
+});
+
+function addJournalEntry() {
+    const journalEntries = document.getElementById('journalEntries');
+    const newEntry = document.createElement('div');
+    newEntry.className = 'entry';
+    newEntry.innerHTML = `
+        <div class="entry-content">
+            <div class="entry-date">${new Date().toLocaleString()}</div>
+            <textarea class="form-control form-control-sm mb-2" rows="2" placeholder="Add a note..."></textarea>
+            <div class="d-flex justify-content-end gap-2">
+                <button class="btn btn-sm btn-light" onclick="cancelEntry(this)">Cancel</button>
+                <button class="btn btn-sm btn-dark" onclick="saveEntry(this)">Save</button>
+            </div>
+        </div>
+    `;
+    journalEntries.prepend(newEntry);
+}
+
+function saveEntry(button) {
+    const entryContent = button.closest('.entry-content');
+    const text = entryContent.querySelector('textarea').value;
+    const date = entryContent.querySelector('.entry-date').textContent;
+    
+    entryContent.innerHTML = `
+        <div class="entry-date">${date}</div>
+        <p class="mb-0">${text}</p>
+    `;
+}
+
+function cancelEntry(button) {
+    button.closest('.entry').remove();
+}
 </script>
 {% endblock %}

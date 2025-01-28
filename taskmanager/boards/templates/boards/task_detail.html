@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Back to Board Link -->
+    <a href="{% url 'board' %}" class="text-decoration-none text-muted mb-4 d-inline-block">
+        <i class="bi bi-arrow-left"></i> Back to Board
+    </a>
+
+    <!-- Task Details Container -->
+    <div class="task-detail-container bg-white rounded-lg shadow-sm p-4">
+        <!-- Task Title -->
+        <div class="mb-4">
+            <input type="text" class="form-control-plaintext form-control-lg fw-bold" 
+                   id="taskTitle" value="{{ task.title }}" readonly>
+        </div>
+
+        <!-- Task Summary Box -->
+        <div class="task-summary p-3 bg-light rounded mb-4">
+            <div class="d-flex gap-4 mb-3">
+                <div>
+                    <span class="text-muted small d-block mb-1">Status</span>
+                    <select class="form-select form-select-sm" id="taskStatus">
+                        <option value="not-started" {% if task.status.name == 'not-started' %}selected{% endif %}>Not Started</option>
+                        <option value="doing" {% if task.status.name == 'doing' %}selected{% endif %}>Doing</option>
+                        <option value="done" {% if task.status.name == 'done' %}selected{% endif %}>Done</option>
+                    </select>
+                </div>
+                <div>
+                    <span class="text-muted small d-block mb-1">Priority</span>
+                    <div>{{ task.tag }}</div>
+                </div>
+                <div>
+                    <span class="text-muted small d-block mb-1">Due Date</span>
+                    <div>{{ task.duedate|date:"M d, Y"|default:"No due date" }}</div>
+                </div>
+            </div>
+            <div>
+                <span class="text-muted small d-block mb-1">Description</span>
+                <p class="mb-0">{{ task.description }}</p>
+            </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="notes-section">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0">Notes</h6>
+                <button class="btn btn-sm btn-light" onclick="addNote()">
+                    Add Note
+                </button>
+            </div>
+            <div id="notesList" class="timeline-simple">
+                <!-- Notes will be added here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Timeline Style */
+.timeline-simple {
+    border-left: 2px solid #e5e7eb;
+    padding-left: 1rem;
+    margin-left: 0.5rem;
+}
+
+.timeline-simple .entry {
+    position: relative;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+}
+
+.timeline-simple .entry::before {
+    content: '';
+    position: absolute;
+    left: -0.35rem;
+    top: 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #fff;
+    border: 2px solid #6B7280;
+    border-radius: 50%;
+}
+
+.entry-content {
+    background: #f9fafb;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.entry-date {
+    font-size: 0.75rem;
+    color: #6B7280;
+}
+</style>
+
+<script>
+function addNote() {
+    const notesList = document.getElementById('notesList');
+    const newEntry = document.createElement('div');
+    newEntry.className = 'entry';
+    newEntry.innerHTML = `
+        <div class="entry-content">
+            <div class="entry-date">${new Date().toLocaleString()}</div>
+            <textarea class="form-control form-control-sm mb-2" rows="2" placeholder="Add a note..."></textarea>
+            <div class="d-flex justify-content-end gap-2">
+                <button class="btn btn-sm btn-light" onclick="cancelNote(this)">Cancel</button>
+                <button class="btn btn-sm btn-dark" onclick="saveNote(this)">Save</button>
+            </div>
+        </div>
+    `;
+    notesList.prepend(newEntry);
+}
+
+function saveNote(button) {
+    const entryContent = button.closest('.entry-content');
+    const text = entryContent.querySelector('textarea').value;
+    const date = entryContent.querySelector('.entry-date').textContent;
+    
+    entryContent.innerHTML = `
+        <div class="entry-date">${date}</div>
+        <p class="mb-0">${text}</p>
+    `;
+}
+
+function cancelNote(button) {
+    button.closest('.entry').remove();
+}
+</script>
+{% endblock %} 
