@@ -2,6 +2,9 @@
 {% extends "base.html" %}
 {% load static %}
 
+<!-- Add Bootstrap Icons CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 {% block content %}
 <div class="container my-4">
   <div class="info-container">
@@ -31,7 +34,7 @@
                     <button class="delete-task" data-task-id="{{ task.id }}">×</button>
                 </div>
                 <p class="task-description"
-                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`)"
+                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)"
                     style="cursor: pointer;">{{ task.description }}</p>
             </div>
             {% endif %}
@@ -50,7 +53,7 @@
                     <button class="delete-task" data-task-id="{{ task.id }}">×</button>
                 </div>
                 <p class="task-description"
-                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`)"
+                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)"
                     style="cursor: pointer;">{{ task.description }}</p>
             </div>
             {% endif %}
@@ -69,7 +72,7 @@
                     <button class="delete-task" data-task-id="{{ task.id }}">×</button>
                 </div>
                 <p class="task-description"
-                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`)"
+                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)"
                     style="cursor: pointer;">{{ task.description }}</p>
             </div>
             {% endif %}
@@ -123,45 +126,137 @@
 </div>
 
 <!-- Task Details Modal -->
-<div class="modal fade" id="taskDetailsModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div class="modal fade" id="taskDetailsModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="taskDetailsModalLabel">Task Details</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+      <div class="modal-header bg-light border-bottom shadow-sm">
+        <h5 class="modal-title" id="taskDetailsModalLabel">
+          <i class="bi bi-card-checklist me-2"></i>Task Details
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <div class="task-details-grid">
-          <div class="detail-item">
-            <h6 class="detail-label">Title</h6>
-            <p id="modalTaskTitle" class="detail-value"></p>
+      <div class="modal-body p-0">
+        <div class="row g-0">
+          <!-- Task Info Column -->
+          <div class="col-md-5 border-end">
+            <div class="task-info p-4">
+              <div class="detail-item mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="detail-label text-uppercase text-muted mb-0">
+                    <i class="bi bi-type-h1 me-2"></i>Title
+                  </h6>
+                  <button class="btn btn-link btn-sm p-0 edit-task-btn" data-field="title">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </div>
+                <p id="modalTaskTitle" class="detail-value fs-5 mb-0"></p>
+              </div>
+
+              <div class="detail-item mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="detail-label text-uppercase text-muted mb-0">
+                    <i class="bi bi-text-paragraph me-2"></i>Description
+                  </h6>
+                  <button class="btn btn-link btn-sm p-0 edit-task-btn" data-field="description">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </div>
+                <p id="modalTaskDescription" class="detail-value"></p>
+              </div>
+
+              <div class="detail-item mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="detail-label text-uppercase text-muted mb-0">
+                    <i class="bi bi-tag me-2"></i>Tag
+                  </h6>
+                  <button class="btn btn-link btn-sm p-0 edit-task-btn" data-field="tag">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </div>
+                <span id="modalTaskTag" class="badge bg-primary rounded-pill px-3 py-2"></span>
+              </div>
+
+              <div class="detail-item mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="detail-label text-uppercase text-muted mb-0">
+                    <i class="bi bi-calendar-event me-2"></i>Due Date
+                  </h6>
+                  <button class="btn btn-link btn-sm p-0 edit-task-btn" data-field="duedate">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </div>
+                <p id="modalTaskDueDate" class="detail-value"></p>
+              </div>
+
+              <div class="detail-item">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="detail-label text-uppercase text-muted mb-0">
+                    <i class="bi bi-clock-history me-2"></i>Status
+                  </h6>
+                </div>
+                <select class="form-select" id="modalTaskStatusSelect">
+                  <option value="not-started">Not Started</option>
+                  <option value="doing">Doing</option>
+                  <option value="done">Done</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="detail-item">
-            <h6 class="detail-label">Description</h6>
-            <p id="modalTaskDescription" class="detail-value"></p>
-          </div>
-          <div class="detail-item">
-            <h6 class="detail-label">Tag</h6>
-            <p id="modalTaskTag" class="detail-value"></p>
-          </div>
-          <div class="detail-item">
-            <h6 class="detail-label">Due Date</h6>
-            <p id="modalTaskDueDate" class="detail-value"></p>
-          </div>
-          <div class="detail-item">
-            <h6 class="detail-label">Created</h6>
-            <p id="modalTaskCreatedAt" class="detail-value"></p>
-          </div>
-          <div class="detail-item">
-            <h6 class="detail-label">Last Updated</h6>
-            <p id="modalTaskUpdatedAt" class="detail-value"></p>
+          
+          <!-- Timeline Column -->
+          <div class="col-md-7 bg-light">
+            <div class="p-4">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="text-uppercase text-muted mb-0">
+                  <i class="bi bi-clock-history me-2"></i>Activity Timeline
+                </h6>
+                <button class="btn btn-sm btn-primary add-event-btn" onclick="showAddEventForm()">
+                  <i class="bi bi-plus-lg me-2"></i>Add Event
+                </button>
+              </div>
+
+              <div class="vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                <!-- Created Event -->
+                <div class="vertical-timeline-item vertical-timeline-element">
+                  <div>
+                    <span class="vertical-timeline-element-icon bounce-in">
+                      <i class="badge badge-dot badge-dot-xl bg-success"></i>
+                    </span>
+                    <div class="vertical-timeline-element-content bounce-in shadow-sm">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="timeline-title text-success mb-0">Task Created</h6>
+                        <span class="badge bg-light text-dark" id="modalTaskCreatedAt"></span>
+                      </div>
+                      <p class="text-muted mt-2 mb-0">Task was created</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Status Update Event -->
+                <div class="vertical-timeline-item vertical-timeline-element">
+                  <div>
+                    <span class="vertical-timeline-element-icon bounce-in">
+                      <i class="badge badge-dot badge-dot-xl bg-primary"></i>
+                    </span>
+                    <div class="vertical-timeline-element-content bounce-in shadow-sm">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="timeline-title text-primary mb-0">Status Updated</h6>
+                        <span class="badge bg-light text-dark" id="modalTaskUpdatedAt"></span>
+                      </div>
+                      <p class="text-muted mt-2 mb-0">Status changed to <span class="fw-bold" id="modalTaskStatus"></span></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save-changes-btn">
+          <i class="bi bi-check2 me-2"></i>Save Changes
+        </button>
       </div>
     </div>
   </div>
@@ -536,6 +631,210 @@ h2, h5 {
     margin: 0;
     line-height: 1.5;
 }
+
+/* Timeline Styles */
+.vertical-timeline {
+    width: 100%;
+    position: relative;
+    padding: 1.5rem 0 1rem;
+}
+
+.vertical-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 67px;
+    height: 100%;
+    width: 4px;
+    background: #e9ecef;
+    border-radius: .25rem;
+}
+
+.vertical-timeline-element {
+    position: relative;
+    margin: 0 0 1rem;
+}
+
+.vertical-timeline--animate .vertical-timeline-element-icon.bounce-in {
+    visibility: visible;
+    animation: cd-bounce-1 .8s;
+}
+
+.vertical-timeline-element-icon {
+    position: absolute;
+    top: 0;
+    left: 60px;
+}
+
+.vertical-timeline-element-icon .badge-dot-xl {
+    box-shadow: 0 0 0 5px #fff;
+}
+
+.badge-dot-xl {
+    width: 18px;
+    height: 18px;
+    position: relative;
+}
+
+.badge-dot-xl::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: .25rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -5px 0 0 -5px;
+    background: #fff;
+}
+
+.vertical-timeline-element-content {
+    position: relative;
+    margin-left: 90px;
+    font-size: .8rem;
+}
+
+.vertical-timeline-element-content .timeline-title {
+    font-size: .8rem;
+    text-transform: uppercase;
+    margin: 0 0 .5rem;
+    padding: 2px 0 0;
+    font-weight: bold;
+}
+
+.vertical-timeline-element-content .vertical-timeline-element-date {
+    display: block;
+    position: absolute;
+    left: -90px;
+    top: 0;
+    padding-right: 10px;
+    text-align: right;
+    color: #adb5bd;
+    font-size: .7619rem;
+    white-space: nowrap;
+}
+
+.vertical-timeline-element-content:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.card {
+    box-shadow: 0 0.46875rem 2.1875rem rgba(4,9,20,0.03),
+                0 0.9375rem 1.40625rem rgba(4,9,20,0.03),
+                0 0.25rem 0.53125rem rgba(4,9,20,0.05),
+                0 0.125rem 0.1875rem rgba(4,9,20,0.03);
+    border-width: 0;
+    transition: all .2s;
+}
+
+/* Animation for timeline icons */
+@keyframes cd-bounce-1 {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Badge colors */
+.badge-success {
+    background-color: #3ac47d;
+}
+
+.badge-primary {
+    background-color: #3f6ad8;
+}
+
+.badge-warning {
+    background-color: #f7b924;
+}
+
+.badge-danger {
+    background-color: #d92550;
+}
+
+/* Adjust add event button */
+.add-event-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Updated Timeline Styles */
+.vertical-timeline-element-content {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    position: relative;
+    margin-left: 90px;
+    transition: all .2s ease;
+}
+
+.vertical-timeline-element-content:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.1) !important;
+}
+
+.vertical-timeline-element-date {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.detail-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.detail-value {
+    color: #2d3748;
+}
+
+.edit-task-btn {
+    color: #6c757d;
+    transition: color 0.2s ease;
+}
+
+.edit-task-btn:hover {
+    color: #0d6efd;
+}
+
+/* Custom scrollbar for timeline */
+.vertical-timeline::-webkit-scrollbar {
+    width: 6px;
+}
+
+.vertical-timeline::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.vertical-timeline::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.vertical-timeline::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Smooth transitions */
+.modal.fade .modal-dialog {
+    transition: transform .2s ease-out;
+}
+
+.badge {
+    transition: all .2s ease;
+}
+
+.badge:hover {
+    transform: translateY(-1px);
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -647,14 +946,129 @@ document.querySelectorAll('.delete-task').forEach(button => {
     });
 });
 
-function openTaskDetails(title, description, tag, dueDate, createdAt, updatedAt) {
+function openTaskDetails(title, description, tag, dueDate, createdAt, updatedAt, status) {
     document.getElementById('modalTaskTitle').textContent = title;
     document.getElementById('modalTaskDescription').textContent = description;
     document.getElementById('modalTaskTag').textContent = tag || 'No tag';
     document.getElementById('modalTaskDueDate').textContent = dueDate || 'No due date set';
     document.getElementById('modalTaskCreatedAt').textContent = createdAt || 'Unknown';
     document.getElementById('modalTaskUpdatedAt').textContent = updatedAt || 'Unknown';
-    $('#taskDetailsModal').modal('show');
+    document.getElementById('modalTaskStatus').textContent = status || 'Unknown';
+    
+    // Initialize Bootstrap modal
+    const taskModal = new bootstrap.Modal(document.getElementById('taskDetailsModal'));
+    taskModal.show();
 }
+
+// Edit functionality
+document.querySelectorAll('.edit-task-btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+        const field = this.dataset.field;
+        const valueElement = document.getElementById(`modalTask${field.charAt(0).toUpperCase() + field.slice(1)}`);
+        const currentValue = valueElement.textContent;
+        
+        // Create input element
+        const input = document.createElement(field === 'description' ? 'textarea' : 'input');
+        input.value = currentValue;
+        input.className = 'form-control form-control-sm';
+        if (field === 'duedate') {
+            input.type = 'date';
+        }
+        
+        // Replace text with input
+        valueElement.replaceWith(input);
+        input.focus();
+        
+        // Handle save on enter or blur
+        const saveEdit = () => {
+            const newValue = input.value;
+            valueElement.textContent = newValue;
+            input.replaceWith(valueElement);
+        };
+        
+        input.addEventListener('blur', saveEdit);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && field !== 'description') {
+                saveEdit();
+            }
+        });
+    });
+});
+
+function showAddEventForm() {
+    const timelineContainer = document.querySelector('.vertical-timeline');
+    const addEventBtn = document.querySelector('.add-event-btn').closest('.vertical-timeline-element');
+    
+    const eventForm = document.createElement('div');
+    eventForm.className = 'vertical-timeline-item vertical-timeline-element';
+    eventForm.innerHTML = `
+        <div>
+            <span class="vertical-timeline-element-icon bounce-in">
+                <i class="badge badge-dot badge-dot-xl badge-warning"></i>
+            </span>
+            <div class="vertical-timeline-element-content bounce-in">
+                <input type="text" class="form-control form-control-sm mb-2" placeholder="Event Title">
+                <textarea class="form-control form-control-sm mb-2" placeholder="Event Description"></textarea>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-sm btn-secondary me-2" onclick="cancelAddEvent(this)">Cancel</button>
+                    <button class="btn btn-sm btn-primary" onclick="saveNewEvent(this)">Add</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    timelineContainer.insertBefore(eventForm, addEventBtn);
+    addEventBtn.style.display = 'none';
+}
+
+function saveNewEvent(button) {
+    const eventForm = button.closest('.vertical-timeline-element');
+    const title = eventForm.querySelector('input').value;
+    const description = eventForm.querySelector('textarea').value;
+    const date = new Date().toLocaleString();
+    
+    const newEvent = document.createElement('div');
+    newEvent.className = 'vertical-timeline-item vertical-timeline-element';
+    newEvent.innerHTML = `
+        <div>
+            <span class="vertical-timeline-element-icon bounce-in">
+                <i class="badge badge-dot badge-dot-xl badge-primary"></i>
+            </span>
+            <div class="vertical-timeline-element-content bounce-in">
+                <h4 class="timeline-title">${title}</h4>
+                <p>${description}</p>
+                <span class="vertical-timeline-element-date">${date}</span>
+            </div>
+        </div>
+    `;
+    
+    eventForm.replaceWith(newEvent);
+    document.querySelector('.add-event-btn').closest('.vertical-timeline-element').style.display = 'block';
+}
+
+function cancelAddEvent(button) {
+    const eventForm = button.closest('.vertical-timeline-element');
+    document.querySelector('.add-event-btn').closest('.vertical-timeline-element').style.display = 'block';
+    eventForm.remove();
+}
+
+// Initialize tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
+// Update status select when modal opens
+document.getElementById('taskDetailsModal').addEventListener('show.bs.modal', function (event) {
+    const statusSelect = document.getElementById('modalTaskStatusSelect');
+    const currentStatus = document.getElementById('modalTaskStatus').textContent;
+    statusSelect.value = currentStatus.toLowerCase();
+});
+
+// Handle status change
+document.getElementById('modalTaskStatusSelect').addEventListener('change', function(e) {
+    const newStatus = e.target.value;
+    document.getElementById('modalTaskStatus').textContent = newStatus;
+});
 </script>
 {% endblock %}
