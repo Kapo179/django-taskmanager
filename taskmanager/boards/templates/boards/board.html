@@ -16,193 +16,62 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 {% block content %}
-<main role="main" class="container my-4">
-  <header role="banner" class="info-container">
-    <h1>Task Manager</h1>
-    <h2>Welcome, {{ request.user.username }}</h2>
-    <p class="subheading">Manage your tasks below</p>
-  </header>
+<!-- Add viewport meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <section role="region" aria-label="Kanban Board" class="kanban-container d-flex justify-content-between">
-    <!-- below are the columns: Not Started, Doing, Done -->
-    <!-- class="kanban-column" = the column -->
-    <!-- class="column-header" = the header of the column -->
-    <!-- class="kanban-card" = the card in the column -->
-    <!-- class="column-header 'not-started' 'doing' 'done' " = targets a specific column -->
+<main role="main" class="container-fluid p-0">
+    <div class="container my-4">
+        <header role="banner" class="info-container">
+            <h1>Task Manager</h1>
+            <h2>Welcome, {{ request.user.username }}</h2>
+            <p class="subheading">Manage your tasks below</p>
+        </header>
 
-    <div class="kanban-column" role="region" aria-label="Not Started Tasks">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="column-header not-started">Not Started</span>
-            <button class="add-task-btn" style="color: #374151; background: none; border: none; cursor: pointer;" aria-label="Add New Task">+ Add Task</button>
-      </div>
-      <div class="task-list" data-status="not-started" role="list">
-        {% for task in tasks %}
-          {% if task.status.name == "not-started" %}
-            <div class="kanban-card mb-3" data-task-id="{{ task.id }}" role="listitem">
-                <div class="card-content p-3">
-                    <!-- Header with title and priority -->
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            {% if task.tag %}
-                                <span class="priority-tag 
-                                    {% if task.tag == '!' %}priority-low
-                                    {% elif task.tag == '!!' %}priority-medium
-                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                                    {{ task.tag }}
-                                </span>
-                            {% endif %}
-                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                                <p class="card-title mb-0">{{ task.title }}</p>
-                            </a>
-                        </div>
-                        <button class="delete-task" data-task-id="{{ task.id }}">
-                            <span class="delete-emoji">🗑️</span>
-                        </button>
-                    </div>
-                    
-                    <!-- Description -->
-                    <div class="task-description mb-3 ql-editor" style="padding: 0;">
-                        {{ task.description|safe|truncatewords_html:30 }}
-                    </div>
-                    
-                    <!-- Metadata Footer -->
-                    <div class="task-metadata d-flex justify-content-between align-items-center">
-                        <!-- Left side metadata -->
-                        <div class="d-flex align-items-center gap-3">
-                            {% if task.duedate %}
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">📅</span>
-                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">⏰</span>
-                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
-                            </div>
-                        </div>
-                    </div>
+        <section role="region" aria-label="Kanban Board" class="kanban-container">
+            <!-- Not Started Column -->
+            <div class="kanban-column" role="region" aria-label="Not Started Tasks">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="column-header not-started">Not Started</span>
+                    <button class="add-task-btn d-flex align-items-center gap-1" aria-label="Add New Task">
+                        <span class="d-none d-sm-inline">Add Task</span>
+                        <span class="d-inline d-sm-none">+</span>
+                    </button>
+                </div>
+                <div class="task-list" data-status="not-started" role="list">
+                    {% for task in tasks %}
+                        {% if task.status.name == "not-started" %}
+                            {% include "boards/includes/task_card.html" with task=task %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
 
-    <div class="kanban-column">
-      <span class="column-header doing">Doing</span>
-      <div class="task-list" data-status="doing">
-        {% for task in tasks %}
-          {% if task.status.name == "doing" %}
-            <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-                <div class="card-content p-3">
-                    <!-- Header with title and priority -->
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            {% if task.tag %}
-                                <span class="priority-tag 
-                                    {% if task.tag == '!' %}priority-low
-                                    {% elif task.tag == '!!' %}priority-medium
-                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                                    {{ task.tag }}
-                                </span>
-                            {% endif %}
-                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                                <p class="card-title mb-0">{{ task.title }}</p>
-                            </a>
-                        </div>
-                        <button class="delete-task" data-task-id="{{ task.id }}">
-                            <span class="delete-emoji">🗑️</span>
-                        </button>
-                    </div>
-                    
-                    <!-- Description -->
-                    <div class="task-description mb-3 ql-editor" style="padding: 0;">
-                        {{ task.description|safe|truncatewords_html:30 }}
-                    </div>
-                    
-                    <!-- Metadata Footer -->
-                    <div class="task-metadata d-flex justify-content-between align-items-center">
-                        <!-- Left side metadata -->
-                        <div class="d-flex align-items-center gap-3">
-                            {% if task.duedate %}
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">📅</span>
-                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">⏰</span>
-                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Doing Column -->
+            <div class="kanban-column" role="region" aria-label="In Progress Tasks">
+                <span class="column-header doing">Doing</span>
+                <div class="task-list" data-status="doing" role="list">
+                    {% for task in tasks %}
+                        {% if task.status.name == "doing" %}
+                            {% include "boards/includes/task_card.html" with task=task %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
 
-    <div class="kanban-column">
-      <span class="column-header done">Done</span> 
-      <div class="task-list" data-status="done">
-        {% for task in tasks %}
-          {% if task.status.name == "done" %}
-            <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-                <div class="card-content p-3">
-                    <!-- Header with title and priority -->
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            {% if task.tag %}
-                                <span class="priority-tag 
-                                    {% if task.tag == '!' %}priority-low
-                                    {% elif task.tag == '!!' %}priority-medium
-                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                                    {{ task.tag }}
-                                </span>
-                            {% endif %}
-                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                                <p class="card-title mb-0">{{ task.title }}</p>
-                            </a>
-                        </div>
-                        <button class="delete-task" data-task-id="{{ task.id }}">
-                            <span class="delete-emoji">🗑️</span>
-                        </button>
-                    </div>
-                    
-                    <!-- Description -->
-                    <div class="task-description mb-3 ql-editor" style="padding: 0;">
-                        {{ task.description|safe|truncatewords_html:30 }}
-                    </div>
-                    
-                    <!-- Metadata Footer -->
-                    <div class="task-metadata d-flex justify-content-between align-items-center">
-                        <!-- Left side metadata -->
-                        <div class="d-flex align-items-center gap-3">
-                            {% if task.duedate %}
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">📅</span>
-                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">⏰</span>
-                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Done Column -->
+            <div class="kanban-column" role="region" aria-label="Completed Tasks">
+                <span class="column-header done">Done</span>
+                <div class="task-list" data-status="done" role="list">
+                    {% for task in tasks %}
+                        {% if task.status.name == "done" %}
+                            {% include "boards/includes/task_card.html" with task=task %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
+        </section>
     </div>
-  </div>
-
-</div>
+</main>
 
 <!--Here we will add the modal for adding a task-->
 

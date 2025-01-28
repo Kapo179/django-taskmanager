@@ -1,0 +1,46 @@
+<div class="kanban-card mb-3" data-task-id="{{ task.id }}" role="listitem">
+    <div class="card-content p-3">
+        <!-- Header with title and priority -->
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                {% if task.tag %}
+                    <span class="priority-tag 
+                        {% if task.tag == '!' %}priority-low
+                        {% elif task.tag == '!!' %}priority-medium
+                        {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                        {{ task.tag }}
+                    </span>
+                {% endif %}
+                <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
+                    <p class="card-title mb-0">{{ task.title }}</p>
+                </a>
+            </div>
+            <button class="delete-task" data-task-id="{{ task.id }}" aria-label="Delete task">
+                <span class="delete-emoji" aria-hidden="true">🗑️</span>
+            </button>
+        </div>
+        
+        <!-- Description -->
+        <div class="task-description mb-3 ql-editor" style="padding: 0;">
+            {{ task.description|safe|truncatewords_html:30 }}
+        </div>
+        
+        <!-- Metadata Footer -->
+        <div class="task-metadata d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <!-- Left side metadata -->
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                {% if task.duedate %}
+                <div class="metadata-item">
+                    <span class="metadata-emoji" aria-hidden="true">📅</span>
+                    <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="metadata-item">
+                    <span class="metadata-emoji" aria-hidden="true">⏰</span>
+                    <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
