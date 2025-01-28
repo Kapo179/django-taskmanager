@@ -267,66 +267,6 @@
     </div>
 </div>
 
-<!-- Task Details Modal -->
-<div class="modal fade" id="taskDetailsModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-            <!-- Modal Header with Title -->
-            <div class="modal-header border-0 pb-0">
-                <input type="text" class="form-control-plaintext form-control-lg fw-bold" id="modalTaskTitle" readonly>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body pt-2">
-                <!-- Task Summary Box -->
-                <div class="task-summary p-3 bg-light rounded mb-4">
-                    <div class="d-flex gap-3 mb-2">
-                        <div>
-                            <span class="text-muted small">Status</span>
-                            <select class="form-select form-select-sm mt-1" id="modalTaskStatusSelect">
-                                <option value="not-started">Not Started</option>
-                                <option value="doing">Doing</option>
-                                <option value="done">Done</option>
-                            </select>
-                        </div>
-                        <div>
-                            <span class="text-muted small">Priority</span>
-                            <div class="mt-1" id="modalTaskTag"></div>
-                        </div>
-                        <div>
-                            <span class="text-muted small">Due Date</span>
-                            <div class="mt-1" id="modalTaskDueDate"></div>
-                        </div>
-                    </div>
-                    <div class="description-section">
-                        <span class="text-muted small">Description</span>
-                        <p class="form-text mb-0 mt-1" id="modalTaskDescription"></p>
-                    </div>
-                </div>
-
-                <!-- Journal Section -->
-                <div class="journal-section">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="mb-0">Notes</h6>
-                        <button class="btn btn-sm btn-light" onclick="addJournalEntry()">
-                            Add Note
-                        </button>
-                    </div>
-                    <div id="journalEntries" class="timeline-simple">
-                        <!-- Journal entries will be added here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer border-0">
-                <button type="button" class="btn-close-modal" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn-submit save-changes-btn">Save Changes</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Here's the CSS for the kanban board-->
 <style>
