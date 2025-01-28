@@ -20,8 +20,10 @@ from accounts import views as account_views
 from django.shortcuts import redirect
 from django.contrib.auth.views import LogoutView
 
+
 def redirect_to_login(request):
     return redirect('login')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

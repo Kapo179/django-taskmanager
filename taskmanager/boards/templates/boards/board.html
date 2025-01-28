@@ -16,193 +16,59 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 {% block content %}
-<div class="container my-4">
-  <div class="info-container">
-    <h2>Welcome, {{ request.user.username }}</h2>
-    <p class="subheading">Manage your tasks below</p>
-  </div>
+<!-- Add viewport meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <div class="kanban-container d-flex justify-content-between">
-    <!-- below are the columns: Not Started, Doing, Done -->
-    <!-- class="kanban-column" = the column -->
-    <!-- class="column-header" = the header of the column -->
-    <!-- class="kanban-card" = the card in the column -->
-    <!-- class="column-header 'not-started' 'doing' 'done' " = targets a specific column -->
+<main role="main" class="container-fluid p-0">
+    <div class="container my-4">
+        <header role="banner" class="info-container">
+            <h1>Task Manager</h1>
+            <h2>Welcome, {{ request.user.username }}</h2>
+            <p class="subheading">Manage your tasks below</p>
+        </header>
 
-    <div class="kanban-column">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="column-header not-started">Not Started</span>
-            <button class="add-task-btn" style="color: #6B7280; background: none; border: none; cursor: pointer;">+ Add
-                Task</button>
-      </div>
-      <div class="task-list" data-status="not-started">
-        {% for task in tasks %}
-          {% if task.status.name == "not-started" %}
-            <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-                <div class="card-content p-3">
-                    <!-- Header with title and priority -->
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            {% if task.tag %}
-                                <span class="priority-tag 
-                                    {% if task.tag == '!' %}priority-low
-                                    {% elif task.tag == '!!' %}priority-medium
-                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                                    {{ task.tag }}
-                                </span>
-                            {% endif %}
-                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                                <h5 class="card-title mb-0">{{ task.title }}</h5>
-                            </a>
-                        </div>
-                        <button class="delete-task" data-task-id="{{ task.id }}">
-                            <span class="delete-emoji">🗑️</span>
-                        </button>
-                    </div>
-                    
-                    <!-- Description -->
-                    <div class="task-description mb-3 ql-editor" style="padding: 0;">
-                        {{ task.description|safe|truncatewords_html:30 }}
-                    </div>
-                    
-                    <!-- Metadata Footer -->
-                    <div class="task-metadata d-flex justify-content-between align-items-center">
-                        <!-- Left side metadata -->
-                        <div class="d-flex align-items-center gap-3">
-                            {% if task.duedate %}
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">📅</span>
-                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">⏰</span>
-                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
-                            </div>
-                        </div>
-                    </div>
+        <section role="region" aria-label="Kanban Board" class="kanban-container">
+            <!-- Not Started Column -->
+            <div class="kanban-column" role="region" aria-label="Not Started Tasks">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="column-header not-started">Not Started</span>
+            <button class="add-task-btn" style="color: #374151; background: none; border: none; cursor: pointer;" aria-label="Add New Task">+ Add Task</button>
+                </div>
+                <div class="task-list" data-status="not-started" role="list">
+                    {% for task in tasks %}
+                        {% if task.status.name == "not-started" %}
+                            {% include "boards/includes/task_card.html" with task=task %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
 
-    <div class="kanban-column">
-      <span class="column-header doing">Doing</span>
-      <div class="task-list" data-status="doing">
-        {% for task in tasks %}
-          {% if task.status.name == "doing" %}
-            <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-                <div class="card-content p-3">
-                    <!-- Header with title and priority -->
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            {% if task.tag %}
-                                <span class="priority-tag 
-                                    {% if task.tag == '!' %}priority-low
-                                    {% elif task.tag == '!!' %}priority-medium
-                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                                    {{ task.tag }}
-                                </span>
-                            {% endif %}
-                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                                <h5 class="card-title mb-0">{{ task.title }}</h5>
-                            </a>
-                        </div>
-                        <button class="delete-task" data-task-id="{{ task.id }}">
-                            <span class="delete-emoji">🗑️</span>
-                        </button>
-                    </div>
-                    
-                    <!-- Description -->
-                    <div class="task-description mb-3 ql-editor" style="padding: 0;">
-                        {{ task.description|safe|truncatewords_html:30 }}
-                    </div>
-                    
-                    <!-- Metadata Footer -->
-                    <div class="task-metadata d-flex justify-content-between align-items-center">
-                        <!-- Left side metadata -->
-                        <div class="d-flex align-items-center gap-3">
-                            {% if task.duedate %}
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">📅</span>
-                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">⏰</span>
-                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Doing Column -->
+            <div class="kanban-column" role="region" aria-label="In Progress Tasks">
+                <span class="column-header doing">Doing</span>
+                <div class="task-list" data-status="doing" role="list">
+                    {% for task in tasks %}
+                        {% if task.status.name == "doing" %}
+                            {% include "boards/includes/task_card.html" with task=task %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
 
-    <div class="kanban-column">
-      <span class="column-header done">Done</span> 
-      <div class="task-list" data-status="done">
-        {% for task in tasks %}
-          {% if task.status.name == "done" %}
-            <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-                <div class="card-content p-3">
-                    <!-- Header with title and priority -->
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            {% if task.tag %}
-                                <span class="priority-tag 
-                                    {% if task.tag == '!' %}priority-low
-                                    {% elif task.tag == '!!' %}priority-medium
-                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                                    {{ task.tag }}
-                                </span>
-                            {% endif %}
-                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                                <h5 class="card-title mb-0">{{ task.title }}</h5>
-                            </a>
-                        </div>
-                        <button class="delete-task" data-task-id="{{ task.id }}">
-                            <span class="delete-emoji">🗑️</span>
-                        </button>
-                    </div>
-                    
-                    <!-- Description -->
-                    <div class="task-description mb-3 ql-editor" style="padding: 0;">
-                        {{ task.description|safe|truncatewords_html:30 }}
-                    </div>
-                    
-                    <!-- Metadata Footer -->
-                    <div class="task-metadata d-flex justify-content-between align-items-center">
-                        <!-- Left side metadata -->
-                        <div class="d-flex align-items-center gap-3">
-                            {% if task.duedate %}
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">📅</span>
-                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">⏰</span>
-                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Done Column -->
+            <div class="kanban-column" role="region" aria-label="Completed Tasks">
+                <span class="column-header done">Done</span>
+                <div class="task-list" data-status="done" role="list">
+                    {% for task in tasks %}
+                        {% if task.status.name == "done" %}
+                            {% include "boards/includes/task_card.html" with task=task %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
+        </section>
     </div>
-  </div>
-
-</div>
+</main>
 
 <!--Here we will add the modal for adding a task-->
 
@@ -301,11 +167,15 @@ body {
 h1 {
     font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 700;
+    font-size: 1.75rem;  /* Reduced from default h1 size */
+    margin-bottom: 0.5rem;
 }
 
-h2, h5 {
+h2 {
     font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 500;
+    font-size: 1.5rem;  /* Slightly smaller than h1 */
+    margin-bottom: 0.25rem;
 }
 
 .kanban-container {
@@ -346,7 +216,7 @@ h2, h5 {
 }
 
 .task-description {
-    color: #4b5563;
+    color: #4A5568;
     font-size: 0.875rem;
     margin-bottom: auto;
     flex-grow: 1;
@@ -367,7 +237,7 @@ h2, h5 {
 }
 
 .metadata-text {
-    color: #6c757d;
+    color: #4A5568;
     font-size: 12px;
     letter-spacing: -0.2px;
 }
@@ -436,7 +306,7 @@ h2, h5 {
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: #6b7280;
+    color: #4A5568;
 }
 
 .modal-form {
@@ -558,7 +428,8 @@ h2, h5 {
 .info-container .subheading {
     font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 300;
-    color: #6B7280;
+    color: #4A5568;
+    font-size: 1rem;
 }
 
 .column-header {
@@ -573,20 +444,20 @@ h2, h5 {
 
 .not-started {
     background-color: #E1E4E8;
-    color: #6B7280;
+    color: #374151;
 }
 
 .doing {
     background-color: #F0E7F6;
-    color: #7B777E;
+    color: #4A2D5F;
 }
 
 .done {
     background-color: #FFDCE0;
-    color: #837173;
+    color: #6D1B20;
 }
 
-.kanban-card h5 {
+.kanban-card p.card-title {
     font-weight: 600;
     font-size: 15px;
     margin: 0 0 4px 0;
@@ -596,7 +467,7 @@ h2, h5 {
 .kanban-card p {
     font-weight: 400;
     font-size: 14px;
-    color: #718096;
+    color: #4A5568;
     margin: 0;
     line-height: 1.4;
 }
@@ -928,486 +799,211 @@ label {
 
 .priority-medium {
     background-color: #FFF3E0;
-    color: #EF6C00;
+    color: #B54D00;
 }
 
 .priority-high {
     background-color: #FFEBEE;
     color: #C62828;
 }
+
+/* Ensure all text content has sufficient contrast */
+.ql-editor p {
+    color: #4A5568 !important; /* Force better contrast for Quill editor content */
+}
+
+/* Update button and interactive element colors for better contrast */
+.btn-add-update {
+    color: #2D3748; /* Darker color for better contrast */
+}
+
+.back-link {
+    color: #4A5568; /* Darker gray for better contrast */
+}
+
+.back-link:hover {
+    color: #2D3748;
+}
+
+/* Ensure form labels have sufficient contrast */
+.form-group label {
+    color: #2D3748;
+}
+
+/* Update modal text colors */
+.modal-header h3 {
+    color: #1A202C;
+}
+
+.close-modal {
+    color: #4A5568;
+}
+
+/* Ensure task titles have good contrast */
+.card-title {
+    color: #1A202C !important; /* Very dark gray, almost black */
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
 <script>
-// Get modal elements
-const modal = document.getElementById('taskModal');
-const openModalBtn = document.querySelector('.add-task-btn');
-const closeModalBtn = document.querySelector('.close-modal');
-const taskForm = document.getElementById('taskForm');
+/* jshint esversion: 11 */
+/* globals Sortable, document, window, fetch, FormData */
+(function() {
+    "use strict";
 
-// This opens the modal
-openModalBtn.addEventListener('click', () => {
-    modal.style.display = 'block';
-});
+    // Initialize task modal functionality
+    const initializeTaskModal = () => {
+        const modal = document.getElementById('taskModal');
+        const openModalBtn = document.querySelector('.add-task-btn');
+        const closeModalBtn = document.querySelector('.close-modal');
+        const taskForm = document.getElementById('taskForm');
 
-// This closes the modal
-closeModalBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
+        if (!modal || !openModalBtn || !closeModalBtn || !taskForm) return;
 
-// This closes the modal when clicking outside
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        modal.style.display = 'none';
-    }
-});
+        openModalBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
 
-// Handle form submission
-taskForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(taskForm);
-    
-    try {
-        const response = await fetch(taskForm.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
             }
         });
-        
-        if (response.ok) {
-            modal.style.display = 'none';
-            window.location.reload();  // Refresh to show new task
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-});
 
-// Initialize Sortable for each task list
-document.querySelectorAll('.task-list').forEach(taskList => {
-    new Sortable(taskList, {
-        group: 'shared',  // Set shared group to allow dragging between lists
-        animation: 150,   // Animation speed in milliseconds
-        ghostClass: 'sortable-ghost',  // Class for the dragging item
-        chosenClass: 'sortable-chosen',  // Class for the chosen item
-        dragClass: 'sortable-drag',  // Class for the dragging item
-        
-        onEnd: function(evt) {
-            const taskId = evt.item.dataset.taskId;
-            const newStatus = evt.to.dataset.status;
+        // Handle form submission
+        taskForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(taskForm);
             
-            
-            const formData = new FormData();
-            formData.append('status', newStatus);
-            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-            
-            // Send update to server
-            fetch(`/task/${taskId}/update/`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    // If update fails, refresh the page to reset positions
-                    window.location.reload();
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                window.location.reload();
-            });
-        }
-    });
-});
-
-document.querySelectorAll('.delete-task').forEach(button => {
-    button.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        if (confirm('Are you sure you want to delete this task?')) {
-            const taskId = button.dataset.taskId;
             try {
-                const response = await fetch(`/task/${taskId}/delete/`, {
+                const response = await fetch(taskForm.action, {
                     method: 'POST',
+                    body: formData,
                     headers: {
                         'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                     }
                 });
                 
                 if (response.ok) {
-                    button.closest('.kanban-card').remove();
+                    modal.style.display = 'none';
+                    window.location.reload();
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
-    });
-});
-
-function openTaskDetails(title, description, tag, dueDate, createdAt, updatedAt, status) {
-    // Set title with plaintext input
-    const titleInput = document.getElementById('modalTaskTitle');
-    titleInput.value = title;
-    
-    // Set description
-    document.getElementById('modalTaskDescription').textContent = description || 'No description';
-    
-    // Set priority tag with proper styling
-    const tagElement = document.getElementById('modalTaskTag');
-    tagElement.textContent = tag || 'No priority';
-    tagElement.className = 'priority-tag ' + (
-        tag === '!' ? 'priority-low' :
-        tag === '!!' ? 'priority-medium' :
-        tag === '!!!' ? 'priority-high' : ''
-    );
-    
-    // Set due date with proper formatting
-    document.getElementById('modalTaskDueDate').textContent = 
-        dueDate === 'No due date' ? 'No due date set' : new Date(dueDate).toLocaleDateString();
-    
-    // Set created date
-    document.getElementById('modalTaskCreatedAt').textContent = 
-        new Date(createdAt).toLocaleDateString();
-    
-    // Set status
-    const statusSelect = document.getElementById('modalTaskStatusSelect');
-    statusSelect.value = status.toLowerCase();
-    document.getElementById('modalTaskStatus').textContent = status;
-    
-    // Set created and updated times in timeline
-    document.getElementById('modalTaskCreatedAtTime').textContent = 
-        new Date(createdAt).toLocaleString();
-    document.getElementById('modalTaskUpdatedAt').textContent = 
-        new Date(updatedAt).toLocaleString();
-    
-    // Store the task ID
-    const taskId = event.currentTarget.closest('.kanban-card').dataset.taskId;
-    document.querySelector('.save-changes-btn').dataset.taskId = taskId;
-    
-    // Show the modal
-    const taskModal = new bootstrap.Modal(document.getElementById('taskDetailsModal'));
-    taskModal.show();
-}
-
-// Handle saving changes
-document.querySelector('.save-changes-btn').addEventListener('click', async function() {
-    const taskId = this.dataset.taskId;
-    const formData = new FormData();
-    
-    // Format data properly before sending
-    formData.append('title', document.getElementById('modalTaskTitle').value);
-    formData.append('description', document.getElementById('modalTaskDescription').textContent);
-    formData.append('status', document.getElementById('modalTaskStatusSelect').value);
-    
-    // Handle tag/priority
-    const tag = document.getElementById('modalTaskTag').textContent;
-    if (tag !== 'No priority') {
-        formData.append('tag', tag);
-    }
-    
-    // Handle due date
-    const dueDate = document.getElementById('modalTaskDueDate').textContent;
-    if (dueDate !== 'No due date set') {
-        const formattedDate = new Date(dueDate).toISOString().split('T')[0];
-        formData.append('duedate', formattedDate);
-    }
-    
-    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-    
-    try {
-        const response = await fetch(`/task/${taskId}/update/`, {
-            method: 'POST',
-            body: formData
         });
-        
-        if (response.ok) {
-            window.location.reload();
-        } else {
-            console.error('Failed to update task');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-});
+    };
 
-// Handle status changes
-document.getElementById('modalTaskStatusSelect').addEventListener('change', async function(e) {
-    const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
-    const newStatus = e.target.value;
-    
-    const formData = new FormData();
-    formData.append('status', newStatus);
-    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-    
-    try {
-        const response = await fetch(`/task/${taskId}/update/`, {
-            method: 'POST',
-            body: formData
-        });
-        
-        if (response.ok) {
-            document.getElementById('modalTaskStatus').textContent = newStatus;
-            // Add new timeline entry for status update
-            const timelineList = document.querySelector('.timeline-3');
-            const newStatusItem = document.createElement('li');
-            newStatusItem.innerHTML = `
-                <div class="timeline-content">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="timeline-title">Status Updated</span>
-                        <span class="text-muted small">${new Date().toLocaleString()}</span>
-                    </div>
-                    <p class="text-muted small mb-0">Status changed to <span class="fw-medium">${newStatus}</span></p>
-                </div>
-            `;
-            timelineList.appendChild(newStatusItem);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-});
-
-// Edit functionality
-document.querySelectorAll('.edit-task-btn').forEach(button => {
-    button.addEventListener('click', function(e) {
-        const field = this.dataset.field;
-        const valueElement = document.getElementById(`modalTask${field.charAt(0).toUpperCase() + field.slice(1)}`);
-        const currentValue = valueElement.textContent.trim();
-        
-        if (field === 'tag') {
-            // Create select element for priority
-            const select = document.createElement('select');
-            select.className = 'form-control form-control-sm';
-            select.innerHTML = `
-                <option value="">No Priority</option>
-                <option value="!">! Low Priority</option>
-                <option value="!!">!! Medium Priority</option>
-                <option value="!!!">!!! High Priority</option>
-            `;
-            select.value = currentValue;
-            
-            valueElement.replaceWith(select);
-            select.focus();
-            
-            const saveEdit = () => {
-                const newValue = select.value;
-                valueElement.textContent = newValue;
-                valueElement.className = `priority-tag ${
-                    newValue === '!' ? 'priority-low' :
-                    newValue === '!!' ? 'priority-medium' :
-                    newValue === '!!!' ? 'priority-high' : ''
-                }`;
-                select.replaceWith(valueElement);
+    // Initialize drag and drop functionality
+    const initializeSortable = () => {
+        document.querySelectorAll('.task-list').forEach(taskList => {
+            // Store Sortable instance to avoid side effects
+            const sortable = Sortable.create(taskList, {
+                group: 'shared',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag',
                 
-                // Save to server
-                const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
-                const formData = new FormData();
-                formData.append('tag', newValue);
-                formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-                
-                fetch(`/task/${taskId}/update/`, {
-                    method: 'POST',
-                    body: formData
-                });
-            };
-            
-            select.addEventListener('change', saveEdit);
-            select.addEventListener('blur', saveEdit);
-        } else {
-            // Create input element
-            const input = document.createElement(field === 'description' ? 'textarea' : 'input');
-            input.value = currentValue === 'No due date set' ? '' : currentValue;
-            input.className = 'form-control form-control-sm';
-            
-            // Set specific input attributes based on field type
-            if (field === 'duedate') {
-                input.type = 'date';
-                input.min = new Date().toISOString().split('T')[0]; // Set minimum date to today
-            }
-            
-            // Replace text with input
-            valueElement.replaceWith(input);
-            input.focus();
-            
-            // Handle save on enter or blur
-            const saveEdit = () => {
-                const newValue = input.value;
-                // Format the date for display if it's a date field
-                const displayValue = field === 'duedate' 
-                    ? (newValue ? new Date(newValue).toISOString().split('T')[0] : 'No due date set')
-                    : newValue;
-                
-                valueElement.textContent = displayValue;
-                input.replaceWith(valueElement);
-                
-                // Add the save functionality here
-                const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
-                const formData = new FormData();
-                formData.append(field, newValue);
-                formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-                
-                fetch(`/task/${taskId}/update/`, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        console.error('Failed to update task');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            };
-            
-            input.addEventListener('blur', saveEdit);
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && field !== 'description') {
-                    saveEdit();
+                onEnd: function(evt) {
+                    const taskId = evt.item.dataset.taskId;
+                    const newStatus = evt.to.dataset.status;
+                    
+                    const formData = new FormData();
+                    formData.append('status', newStatus);
+                    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+                    
+                    fetch('/task/' + taskId + '/update/', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        window.location.reload();
+                    });
                 }
             });
-        }
+            return sortable; // Return instance to ensure proper initialization
+        });
+    };
+
+    // Initialize delete functionality
+    const initializeDeleteButtons = () => {
+        document.querySelectorAll('.delete-task').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                if (confirm('Are you sure you want to delete this task?')) {
+                    const taskId = button.dataset.taskId;
+                    try {
+                        const response = await fetch('/task/' + taskId + '/delete/', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            button.closest('.kanban-card').remove();
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
+            });
+        });
+    };
+
+    // Initialize status change handling
+    const initializeStatusChange = () => {
+        const statusSelect = document.getElementById('modalTaskStatusSelect');
+        if (!statusSelect) return;
+
+        statusSelect.addEventListener('change', async (e) => {
+            const saveButton = document.querySelector('.save-changes-btn');
+            const taskId = saveButton && saveButton.dataset.taskId;
+            if (!taskId) return;
+
+            const newStatus = e.target.value;
+            const formData = new FormData();
+            formData.append('status', newStatus);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            
+            try {
+                const response = await fetch('/task/' + taskId + '/update/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const statusElement = document.getElementById('modalTaskStatus');
+                    if (statusElement) {
+                        statusElement.textContent = newStatus;
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    };
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeTaskModal();
+        initializeSortable();
+        initializeDeleteButtons();
+        initializeStatusChange();
     });
-});
-
-function showAddEventForm() {
-    const timelineContainer = document.querySelector('.vertical-timeline');
-    const addEventBtn = document.querySelector('.add-event-btn').closest('.vertical-timeline-element');
-    
-    const eventForm = document.createElement('div');
-    eventForm.className = 'vertical-timeline-item vertical-timeline-element';
-    eventForm.innerHTML = `
-        <div>
-            <span class="vertical-timeline-element-icon bounce-in">
-                <i class="badge badge-dot badge-dot-xl badge-warning"></i>
-            </span>
-            <div class="vertical-timeline-element-content bounce-in">
-                <input type="text" class="form-control form-control-sm mb-2" placeholder="Event Title">
-                <textarea class="form-control form-control-sm mb-2" placeholder="Event Description"></textarea>
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-sm btn-secondary me-2" onclick="cancelAddEvent(this)">Cancel</button>
-                    <button class="btn btn-sm btn-primary" onclick="saveNewEvent(this)">Add</button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    timelineContainer.insertBefore(eventForm, addEventBtn);
-    addEventBtn.style.display = 'none';
-}
-
-function saveNewEvent(button) {
-    const eventForm = button.closest('.vertical-timeline-element');
-    const title = eventForm.querySelector('input').value;
-    const description = eventForm.querySelector('textarea').value;
-    const date = new Date().toLocaleString();
-    
-    const newEvent = document.createElement('div');
-    newEvent.className = 'vertical-timeline-item vertical-timeline-element';
-    newEvent.innerHTML = `
-        <div>
-            <span class="vertical-timeline-element-icon bounce-in">
-                <i class="badge badge-dot badge-dot-xl badge-primary"></i>
-            </span>
-            <div class="vertical-timeline-element-content bounce-in">
-                <h4 class="timeline-title">${title}</h4>
-                <p>${description}</p>
-                <span class="vertical-timeline-element-date">${date}</span>
-            </div>
-        </div>
-    `;
-    
-    eventForm.replaceWith(newEvent);
-    document.querySelector('.add-event-btn').closest('.vertical-timeline-element').style.display = 'block';
-}
-
-function cancelAddEvent(button) {
-    const eventForm = button.closest('.vertical-timeline-element');
-    document.querySelector('.add-event-btn').closest('.vertical-timeline-element').style.display = 'block';
-    eventForm.remove();
-}
-
-// Initialize tooltips
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl)
-})
-
-// Update status select when modal opens
-document.getElementById('taskDetailsModal').addEventListener('show.bs.modal', function (event) {
-    const statusSelect = document.getElementById('modalTaskStatusSelect');
-    const currentStatus = document.getElementById('modalTaskStatus').textContent;
-    statusSelect.value = currentStatus.toLowerCase();
-});
-
-// Handle status change
-document.getElementById('modalTaskStatusSelect').addEventListener('change', function(e) {
-    const newStatus = e.target.value;
-    document.getElementById('modalTaskStatus').textContent = newStatus;
-});
-
-// Update modal close behavior
-function closeTaskModal() {
-    const modal = document.getElementById('taskDetailsModal');
-    const backdrop = document.querySelector('.modal-backdrop');
-    
-    modal.classList.remove('show');
-    modal.style.display = 'none';
-    
-    if (backdrop) {
-        backdrop.remove();
-    }
-    
-    // Remove modal-open class from body
-    document.body.classList.remove('modal-open');
-    document.body.style.overflow = '';
-    document.body.style.paddingRight = '';
-}
-
-// Close modal when clicking outside
-document.addEventListener('click', (e) => {
-    const modal = document.getElementById('taskDetailsModal');
-    if (e.target === modal) {
-        closeTaskModal();
-    }
-});
-
-// Prevent modal from closing when clicking inside
-document.querySelector('.modal-content').addEventListener('click', (e) => {
-    e.stopPropagation();
-});
-
-function addJournalEntry() {
-    const journalEntries = document.getElementById('journalEntries');
-    const newEntry = document.createElement('div');
-    newEntry.className = 'entry';
-    newEntry.innerHTML = `
-        <div class="entry-content">
-            <div class="entry-date">${new Date().toLocaleString()}</div>
-            <textarea class="form-control form-control-sm mb-2" rows="2" placeholder="Add a note..."></textarea>
-            <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-sm btn-light" onclick="cancelEntry(this)">Cancel</button>
-                <button class="btn btn-sm btn-dark" onclick="saveEntry(this)">Save</button>
-            </div>
-        </div>
-    `;
-    journalEntries.prepend(newEntry);
-}
-
-function saveEntry(button) {
-    const entryContent = button.closest('.entry-content');
-    const text = entryContent.querySelector('textarea').value;
-    const date = entryContent.querySelector('.entry-date').textContent;
-    
-    entryContent.innerHTML = `
-        <div class="entry-date">${date}</div>
-        <p class="mb-0">${text}</p>
-    `;
-}
-
-function cancelEntry(button) {
-    button.closest('.entry').remove();
-}
+})();
 </script>
 {% endblock %}

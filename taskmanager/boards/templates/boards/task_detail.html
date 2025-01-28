@@ -59,8 +59,8 @@
         <!-- Description Section with Quill Editor -->
         <div class="description-section">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="text-muted">Task Details</h6>
-                <button class="btn-save-details" onclick="saveTaskDetails()" style="display: none;">
+                <h3 class="text-muted">Task Details</h3>
+                <button class="btn-save-details" style="display: none;">
                     Save Changes
                 </button>
             </div>
@@ -72,15 +72,35 @@
         <!-- Updates Section -->
         <div class="updates-section mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="text-muted mb-0">
+                <h3 class="text-muted mb-0">
                     <span class="info-emoji">📝</span> Updates
-                </h6>
-                <button class="btn-add-update" onclick="showUpdateForm()">
+                </h3>
+                <button class="btn-add-update">
                     + Add Update
                 </button>
             </div>
-            <div id="updatesTimeline" class="updates-timeline">
-                <!-- Updates will be added here dynamically -->
+            
+            <!-- Update Form -->
+            <div id="updateFormContainer" style="display: none;" class="mb-4">
+                <form id="updateForm" data-task-id="{{ task.id }}">
+                    {% csrf_token %}
+                    <div id="update-editor"></div>
+                    <div class="update-form-buttons mt-3">
+                        <button type="button" class="btn-cancel">Cancel</button>
+                        <button type="submit" class="btn-save">Save Update</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="updatesContainer" class="updates-timeline">
+                {% for update in task.updates.all %}
+                <div class="update-entry">
+                    <div class="update-content">
+                        <div class="update-date">{{ update.created_at|date:"M d, Y H:i" }}</div>
+                        <div>{{ update.content|safe }}</div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -283,101 +303,372 @@
     .quill-hidden {
         display: none;
     }
+
+    .description-section h3, .updates-section h3 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        margin: 0;
+    }
+
+    /* Hide Quill tooltips completely */
+    .ql-tooltip {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+    }
+
+    /* Hide any tooltip-related elements */
+    .ql-tooltip * {
+        display: none !important;
+    }
+
+    /* Responsive styles */
+    @media screen and (max-width: 1024px) {
+        .kanban-container {
+            padding: 10px;
+            gap: 0.5rem;
+        }
+        
+        .kanban-column {
+            min-width: 250px;
+            max-width: 300px;
+            padding: 15px;
+        }
+
+        .info-container {
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .container {
+            padding: 12px;
+        }
+
+        .kanban-container {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+        
+        .kanban-column {
+            width: 100%;
+            min-width: unset;
+            max-width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .task-info-grid {
+            gap: 1rem;
+        }
+        
+        .kanban-card {
+            margin-bottom: 0.75rem;
+        }
+
+        .card-content {
+            padding: 0.75rem !important;
+        }
+
+        .metadata-item {
+            gap: 4px;
+        }
+
+        .column-header {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-add-update {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.813rem;
+        }
+
+        .info-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-container h1 {
+            font-size: 1.25rem;
+        }
+
+        .info-container h2 {
+            font-size: 1rem;
+        }
+
+        .info-container .subheading {
+            font-size: 0.875rem;
+        }
+
+        /* Improve touch targets for mobile */
+        .task-title-link {
+            padding: 4px 0;
+            display: block;
+        }
+
+        .btn-save-details,
+        .btn-cancel,
+        .btn-save {
+            padding: 0.5rem 0.75rem;
+            min-height: 40px; /* Better touch target */
+        }
+
+        /* Adjust modal for mobile */
+        .modal-wrapper {
+            margin: 1rem;
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+        }
+
+        .modal-container {
+            border-radius: 12px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            font-size: 16px; /* Prevent iOS zoom on focus */
+            padding: 0.75rem;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .container {
+            padding: 8px;
+        }
+
+        .kanban-column {
+            padding: 12px;
+        }
+
+        .task-info-grid {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-item {
+            width: 100%;
+        }
+
+        .metadata-item {
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .update-form-buttons {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-cancel,
+        .btn-save {
+            width: 100%;
+        }
+
+        /* Stack metadata items vertically on very small screens */
+        .task-metadata {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .metadata-item {
+            padding: 2px 0;
+        }
+    }
 </style>
 
 <!-- Include Quill.js library -->
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.min.js"></script>
-
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
-// Initialize Quill for Task Details
-const taskDetailsQuill = new Quill('#task-details-editor', {
-    theme: 'snow',
-    modules: {
-        toolbar: [
-            ['bold', 'italic', 'underline'],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            ['clean']
-        ]
-    },
-    placeholder: 'Write task details here...'
-});
+/* jshint esversion: 9 */
+/* globals Quill, document, fetch, FormData */
+(function() {
+    'use strict';
 
-// Enable editing and show save button when content changes
-taskDetailsQuill.on('text-change', function() {
-    document.querySelector('.btn-save-details').style.display = 'block';
-});
+    // Initialize Quill editor for task details
+    function initializeTaskDetailsEditor() {
+        var editor = new Quill('#task-details-editor', {
+            theme: 'snow',
+            placeholder: 'Write task details here...',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['clean']
+                ]
+            }
+        });
 
-// Function to save task details
-function saveTaskDetails() {
-    const content = taskDetailsQuill.root.innerHTML;
-    const taskId = '{{ task.id }}';
-    
-    fetch(`/task/${taskId}/update/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: `description=${encodeURIComponent(content)}`
-    })
-    .then(response => {
-        if (response.ok) {
-            document.querySelector('.btn-save-details').style.display = 'none';
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
+        // Show save button when content changes
+        editor.on('text-change', function() {
+            document.querySelector('.btn-save-details').style.display = 'block';
+        });
 
-function showUpdateForm() {
-    const timeline = document.getElementById('updatesTimeline');
-    const formHtml = `
-        <div class="update-form">
-            <div id="update-editor"></div>
-            <div class="update-form-buttons mt-3">
-                <button class="btn-cancel" onclick="cancelUpdate(this)">Cancel</button>
-                <button class="btn-save" onclick="saveUpdate(this)">Save</button>
-            </div>
-        </div>
-    `;
-    timeline.insertAdjacentHTML('afterbegin', formHtml);
+        // Handle save button click
+        document.querySelector('.btn-save-details').addEventListener('click', function() {
+            var content = editor.root.innerHTML;
+            var taskId = '{{ task.id }}';
+            var formData = new FormData();
+            
+            formData.append('description', content);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            
+            fetch('/task/' + taskId + '/update/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Failed to save task details');
+                }
+                document.querySelector('.btn-save-details').style.display = 'none';
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('Failed to save task details. Please try again.');
+            });
+        });
 
-    // Initialize Quill for the new update form
-    const updateQuill = new Quill('#update-editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                ['bold', 'italic'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['clean']
-            ]
-        },
-        placeholder: 'Write your update here...'
+        return editor;
+    }
+
+    // Initialize Quill editor for updates
+    function initializeUpdateEditor() {
+        var editor = new Quill('#update-editor', {
+            theme: 'snow',
+            placeholder: 'Write your update here...',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['clean']
+                ]
+            }
+        });
+        return editor;
+    }
+
+    // Handle task updates
+    function handleTaskUpdates() {
+        var updateEditor = initializeUpdateEditor();
+        var updateForm = document.getElementById('updateForm');
+        var addUpdateBtn = document.querySelector('.btn-add-update');
+        var updateFormContainer = document.getElementById('updateFormContainer');
+        var cancelBtn = document.querySelector('.btn-cancel');
+        
+        if (!updateForm || !addUpdateBtn || !updateFormContainer || !cancelBtn) return;
+
+        // Show update form when Add Update is clicked
+        addUpdateBtn.addEventListener('click', function() {
+            updateFormContainer.style.display = 'block';
+            updateEditor.setText('');
+        });
+
+        // Hide update form when Cancel is clicked
+        cancelBtn.addEventListener('click', function() {
+            updateFormContainer.style.display = 'none';
+            updateEditor.setText('');
+        });
+
+        // Handle form submission
+        updateForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var content = updateEditor.root.innerHTML;
+            
+            if (!content.trim() || content === '<p><br></p>') {
+                alert('Please enter some content for the update.');
+                return;
+            }
+
+            var taskId = updateForm.dataset.taskId;
+            var formData = new FormData();
+            
+            formData.append('content', content);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            
+            fetch('/task/' + taskId + '/add-update/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Failed to save update');
+                }
+                return response.json();
+            })
+            .then(function(data) {
+                var updateHtml = 
+                    '<div class="update-entry">' +
+                        '<div class="update-content">' +
+                            '<div class="update-date">' + data.created_at + '</div>' +
+                            '<div>' + content + '</div>' +
+                        '</div>' +
+                    '</div>';
+                
+                var updatesContainer = document.getElementById('updatesContainer');
+                if (updatesContainer) {
+                    updatesContainer.insertAdjacentHTML('afterbegin', updateHtml);
+                }
+                
+                updateEditor.setText('');
+                updateFormContainer.style.display = 'none';
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('Failed to save update. Please try again.');
+            });
+        });
+    }
+
+    // Remove tooltips functionality
+    function removeTooltips() {
+        var tooltips = document.querySelectorAll('.ql-tooltip');
+        tooltips.forEach(function(tooltip) {
+            tooltip.remove();
+        });
+        
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.classList && node.classList.contains('ql-tooltip')) {
+                        node.remove();
+                    }
+                });
+            });
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeTaskDetailsEditor();
+        handleTaskUpdates();
+        removeTooltips();
     });
-}
-
-function cancelUpdate(button) {
-    const form = button.closest('.update-form');
-    form.remove();
-}
-
-function saveUpdate(button) {
-    const form = button.closest('.update-form');
-    const quillEditor = form.querySelector('.ql-editor');
-    const content = quillEditor.innerHTML;
-    
-    if (!content.trim() || content === '<p><br></p>') return;
-
-    const date = new Date().toLocaleString();
-    const updateHtml = `
-        <div class="update-entry">
-            <div class="update-content">
-                <div class="update-date">${date}</div>
-                <div>${content}</div>
-            </div>
-        </div>
-    `;
-    form.insertAdjacentHTML('afterend', updateHtml);
-    form.remove();
-}
+})();
 </script>
 {% endblock %}

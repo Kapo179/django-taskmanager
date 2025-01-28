@@ -6,10 +6,11 @@ It includes models for tasks and statuses.
 from django.db import models
 from django.conf import settings
 
+
 class Status(models.Model):
     """
     Model representing a status column on the Kanban board.
-    
+
     Each Status represents a column that tasks can be placed in,
     such as "To Do", "In Progress", or "Done".
     """
@@ -34,7 +35,7 @@ class Status(models.Model):
 class Task(models.Model):
     """
     Model representing a task in the Kanban board.
-    
+
     Each task has a title, description, status, assigned user,
     and timestamps for creation and updates.
     """
@@ -44,7 +45,7 @@ class Task(models.Model):
         ('!!!', 'High Priority'),
         ('', 'No Priority')
     ]
-    
+
     title = models.CharField(max_length=100)
     description = models.TextField()
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
@@ -52,7 +53,12 @@ class Task(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
-    tag = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='', blank=True)
+    tag = models.CharField(
+        max_length=3,
+        choices=PRIORITY_CHOICES,
+        default='',
+        blank=True
+    )
     duedate = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -60,3 +66,27 @@ class Task(models.Model):
     def __str__(self):
         """Return string representation of the task."""
         return self.title
+
+
+class TaskUpdate(models.Model):
+    """
+    Model representing updates/comments on a task.
+    
+    Each update is associated with a task and contains content
+    and timestamp information.
+    """
+    task = models.ForeignKey(
+        Task,
+        on_delete=models.CASCADE,
+        related_name='updates'
+    )
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        """Return string representation of the update."""
+        return f"Update on {self.task.title} at {self.created_at}"
