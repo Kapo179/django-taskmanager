@@ -681,11 +681,30 @@ h2, h5 {
     color: #6B7280;
 }
 
-
 .column-header {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 600;
+    margin-bottom: 16px;
 }
 
+.not-started {
+    background-color: #E1E4E8;
+    color: #6B7280;
+}
+
+.doing {
+    background-color: #F0E7F6;
+    color: #7B777E;
+}
+
+.done {
+    background-color: #FFDCE0;
+    color: #837173;
+}
 
 .kanban-card h5 {
     font-weight: 600;
@@ -694,7 +713,6 @@ h2, h5 {
     color: #2D3748;
 }
 
-
 .kanban-card p {
     font-weight: 400;
     font-size: 14px;
@@ -702,7 +720,6 @@ h2, h5 {
     margin: 0;
     line-height: 1.4;
 }
-
 
 .modal-header h3 {
     font-weight: 600;
@@ -1006,22 +1023,126 @@ document.querySelectorAll('.delete-task').forEach(button => {
 });
 
 function openTaskDetails(title, description, tag, dueDate, createdAt, updatedAt, status) {
-    document.getElementById('modalTaskTitle').textContent = title;
-    document.getElementById('modalTaskDescription').textContent = description;
-    document.getElementById('modalTaskTag').textContent = tag || 'No tag';
-    document.getElementById('modalTaskDueDate').textContent = dueDate || 'No due date set';
-    document.getElementById('modalTaskCreatedAt').textContent = createdAt || 'Unknown';
-    document.getElementById('modalTaskUpdatedAt').textContent = updatedAt || 'Unknown';
-    document.getElementById('modalTaskStatus').textContent = status || 'Unknown';
+    // Set title with plaintext input
+    const titleInput = document.getElementById('modalTaskTitle');
+    titleInput.value = title;
     
-    // Store the task ID in the save button's data attribute
+    // Set description
+    document.getElementById('modalTaskDescription').textContent = description || 'No description';
+    
+    // Set priority tag with proper styling
+    const tagElement = document.getElementById('modalTaskTag');
+    tagElement.textContent = tag || 'No priority';
+    tagElement.className = 'priority-tag ' + (
+        tag === '!' ? 'priority-low' :
+        tag === '!!' ? 'priority-medium' :
+        tag === '!!!' ? 'priority-high' : ''
+    );
+    
+    // Set due date with proper formatting
+    document.getElementById('modalTaskDueDate').textContent = 
+        dueDate === 'No due date' ? 'No due date set' : new Date(dueDate).toLocaleDateString();
+    
+    // Set created date
+    document.getElementById('modalTaskCreatedAt').textContent = 
+        new Date(createdAt).toLocaleDateString();
+    
+    // Set status
+    const statusSelect = document.getElementById('modalTaskStatusSelect');
+    statusSelect.value = status.toLowerCase();
+    document.getElementById('modalTaskStatus').textContent = status;
+    
+    // Set created and updated times in timeline
+    document.getElementById('modalTaskCreatedAtTime').textContent = 
+        new Date(createdAt).toLocaleString();
+    document.getElementById('modalTaskUpdatedAt').textContent = 
+        new Date(updatedAt).toLocaleString();
+    
+    // Store the task ID
     const taskId = event.currentTarget.closest('.kanban-card').dataset.taskId;
     document.querySelector('.save-changes-btn').dataset.taskId = taskId;
     
-    // Initialize Bootstrap modal
+    // Show the modal
     const taskModal = new bootstrap.Modal(document.getElementById('taskDetailsModal'));
     taskModal.show();
 }
+
+// Handle saving changes
+document.querySelector('.save-changes-btn').addEventListener('click', async function() {
+    const taskId = this.dataset.taskId;
+    const formData = new FormData();
+    
+    // Format data properly before sending
+    formData.append('title', document.getElementById('modalTaskTitle').value);
+    formData.append('description', document.getElementById('modalTaskDescription').textContent);
+    formData.append('status', document.getElementById('modalTaskStatusSelect').value);
+    
+    // Handle tag/priority
+    const tag = document.getElementById('modalTaskTag').textContent;
+    if (tag !== 'No priority') {
+        formData.append('tag', tag);
+    }
+    
+    // Handle due date
+    const dueDate = document.getElementById('modalTaskDueDate').textContent;
+    if (dueDate !== 'No due date set') {
+        const formattedDate = new Date(dueDate).toISOString().split('T')[0];
+        formData.append('duedate', formattedDate);
+    }
+    
+    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+    
+    try {
+        const response = await fetch(`/task/${taskId}/update/`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            console.error('Failed to update task');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+// Handle status changes
+document.getElementById('modalTaskStatusSelect').addEventListener('change', async function(e) {
+    const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
+    const newStatus = e.target.value;
+    
+    const formData = new FormData();
+    formData.append('status', newStatus);
+    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+    
+    try {
+        const response = await fetch(`/task/${taskId}/update/`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            document.getElementById('modalTaskStatus').textContent = newStatus;
+            // Add new timeline entry for status update
+            const timelineList = document.querySelector('.timeline-3');
+            const newStatusItem = document.createElement('li');
+            newStatusItem.innerHTML = `
+                <div class="timeline-content">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="timeline-title">Status Updated</span>
+                        <span class="text-muted small">${new Date().toLocaleString()}</span>
+                    </div>
+                    <p class="text-muted small mb-0">Status changed to <span class="fw-medium">${newStatus}</span></p>
+                </div>
+            `;
+            timelineList.appendChild(newStatusItem);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
 
 // Edit functionality
 document.querySelectorAll('.edit-task-btn').forEach(button => {
