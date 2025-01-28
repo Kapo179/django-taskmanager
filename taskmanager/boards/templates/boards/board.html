@@ -40,8 +40,20 @@
             {% if task.status.name == "not-started" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
                 <div class="card-header">
-                    <h5>{{ task.title }}</h5>
-                    <button class="delete-task" data-task-id="{{ task.id }}">×</button>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            {% if task.tag %}
+                            <span class="priority-tag 
+                                {% if task.tag == '!' %}priority-low
+                                {% elif task.tag == '!!' %}priority-medium
+                                {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                                {{ task.tag }}
+                            </span>
+                            {% endif %}
+                            <h5>{{ task.title }}</h5>
+                        </div>
+                        <button class="delete-task" data-task-id="{{ task.id }}">×</button>
+                    </div>
                 </div>
                 <p class="task-description"
                     onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)"
@@ -59,8 +71,20 @@
             {% if task.status.name == "doing" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
                 <div class="card-header">
-                    <h5>{{ task.title }}</h5>
-                    <button class="delete-task" data-task-id="{{ task.id }}">×</button>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            {% if task.tag %}
+                            <span class="priority-tag 
+                                {% if task.tag == '!' %}priority-low
+                                {% elif task.tag == '!!' %}priority-medium
+                                {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                                {{ task.tag }}
+                            </span>
+                            {% endif %}
+                            <h5>{{ task.title }}</h5>
+                        </div>
+                        <button class="delete-task" data-task-id="{{ task.id }}">×</button>
+                    </div>
                 </div>
                 <p class="task-description"
                     onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)"
@@ -78,8 +102,20 @@
             {% if task.status.name == "done" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
                 <div class="card-header">
-                    <h5>{{ task.title }}</h5>
-                    <button class="delete-task" data-task-id="{{ task.id }}">×</button>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            {% if task.tag %}
+                            <span class="priority-tag 
+                                {% if task.tag == '!' %}priority-low
+                                {% elif task.tag == '!!' %}priority-medium
+                                {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                                {{ task.tag }}
+                            </span>
+                            {% endif %}
+                            <h5>{{ task.title }}</h5>
+                        </div>
+                        <button class="delete-task" data-task-id="{{ task.id }}">×</button>
+                    </div>
                 </div>
                 <p class="task-description"
                     onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)"
@@ -115,6 +151,16 @@
                     <div class="form-group">
                         <label for="taskDescription">Description</label>
                         <textarea id="taskDescription" name="description" rows="4"></textarea>
+                    </div>
+                    <!-- Add Priority Tag select before Due Date input -->
+                    <div class="form-group">
+                        <label for="taskTag">Priority</label>
+                        <select id="taskTag" name="tag" class="form-control">
+                            <option value="">No Priority</option>
+                            <option value="!">! Low Priority</option>
+                            <option value="!!">!! Medium Priority</option>
+                            <option value="!!!">!!! High Priority</option>
+                        </select>
                     </div>
                     <!-- Add Due Date input -->
                     <div class="form-group">
@@ -188,13 +234,17 @@
               <div class="detail-item mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <h6 class="detail-label text-uppercase text-muted mb-0">
-                    <i class="bi bi-tag me-2"></i>Tag
+                    <i class="bi bi-tag me-2"></i>Priority
                   </h6>
                   <button class="btn btn-link btn-sm p-0 edit-task-btn" data-field="tag">
                     <i class="bi bi-pencil"></i>
                   </button>
                 </div>
-                <span id="modalTaskTag" class="badge bg-primary rounded-pill px-3 py-2"></span>
+                <span id="modalTaskTag" class="priority-tag 
+                    {% if task.tag == '!' %}priority-low
+                    {% elif task.tag == '!!' %}priority-medium
+                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                </span>
               </div>
 
               <div class="detail-item mb-4">
@@ -905,6 +955,30 @@ h2, h5 {
 .input-group:hover .custom-date-input {
     border-color: #b9bfc4;
 }
+
+.priority-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.priority-low {
+    background-color: #E5F6FD;
+    color: #0369A1;
+}
+
+.priority-medium {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+.priority-high {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -1041,58 +1115,99 @@ document.querySelectorAll('.edit-task-btn').forEach(button => {
         const valueElement = document.getElementById(`modalTask${field.charAt(0).toUpperCase() + field.slice(1)}`);
         const currentValue = valueElement.textContent.trim();
         
-        // Create input element
-        const input = document.createElement(field === 'description' ? 'textarea' : 'input');
-        input.value = currentValue === 'No due date set' ? '' : currentValue;
-        input.className = 'form-control form-control-sm';
-        
-        // Set specific input attributes based on field type
-        if (field === 'duedate') {
-            input.type = 'date';
-            input.min = new Date().toISOString().split('T')[0]; // Set minimum date to today
-        }
-        
-        // Replace text with input
-        valueElement.replaceWith(input);
-        input.focus();
-        
-        // Handle save on enter or blur
-        const saveEdit = () => {
-            const newValue = input.value;
-            // Format the date for display if it's a date field
-            const displayValue = field === 'duedate' 
-                ? (newValue ? new Date(newValue).toISOString().split('T')[0] : 'No due date set')
-                : newValue;
+        if (field === 'tag') {
+            // Create select element for priority
+            const select = document.createElement('select');
+            select.className = 'form-control form-control-sm';
+            select.innerHTML = `
+                <option value="">No Priority</option>
+                <option value="!">! Low Priority</option>
+                <option value="!!">!! Medium Priority</option>
+                <option value="!!!">!!! High Priority</option>
+            `;
+            select.value = currentValue;
             
-            valueElement.textContent = displayValue;
-            input.replaceWith(valueElement);
+            valueElement.replaceWith(select);
+            select.focus();
             
-            // Add the save functionality here
-            const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
-            const formData = new FormData();
-            formData.append(field, newValue);
-            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            const saveEdit = () => {
+                const newValue = select.value;
+                valueElement.textContent = newValue;
+                valueElement.className = `priority-tag ${
+                    newValue === '!' ? 'priority-low' :
+                    newValue === '!!' ? 'priority-medium' :
+                    newValue === '!!!' ? 'priority-high' : ''
+                }`;
+                select.replaceWith(valueElement);
+                
+                // Save to server
+                const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
+                const formData = new FormData();
+                formData.append('tag', newValue);
+                formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+                
+                fetch(`/task/${taskId}/update/`, {
+                    method: 'POST',
+                    body: formData
+                });
+            };
             
-            fetch(`/task/${taskId}/update/`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    console.error('Failed to update task');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        };
-        
-        input.addEventListener('blur', saveEdit);
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && field !== 'description') {
-                saveEdit();
+            select.addEventListener('change', saveEdit);
+            select.addEventListener('blur', saveEdit);
+        } else {
+            // Create input element
+            const input = document.createElement(field === 'description' ? 'textarea' : 'input');
+            input.value = currentValue === 'No due date set' ? '' : currentValue;
+            input.className = 'form-control form-control-sm';
+            
+            // Set specific input attributes based on field type
+            if (field === 'duedate') {
+                input.type = 'date';
+                input.min = new Date().toISOString().split('T')[0]; // Set minimum date to today
             }
-        });
+            
+            // Replace text with input
+            valueElement.replaceWith(input);
+            input.focus();
+            
+            // Handle save on enter or blur
+            const saveEdit = () => {
+                const newValue = input.value;
+                // Format the date for display if it's a date field
+                const displayValue = field === 'duedate' 
+                    ? (newValue ? new Date(newValue).toISOString().split('T')[0] : 'No due date set')
+                    : newValue;
+                
+                valueElement.textContent = displayValue;
+                input.replaceWith(valueElement);
+                
+                // Add the save functionality here
+                const taskId = document.querySelector('.save-changes-btn').dataset.taskId;
+                const formData = new FormData();
+                formData.append(field, newValue);
+                formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+                
+                fetch(`/task/${taskId}/update/`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Failed to update task');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            };
+            
+            input.addEventListener('blur', saveEdit);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && field !== 'description') {
+                    saveEdit();
+                }
+            });
+        }
     });
 });
 
