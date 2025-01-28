@@ -22,6 +22,8 @@ def add_task(request):
         title = request.POST.get('title')
         description = request.POST.get('description')
         status_name = request.POST.get('status')
+        duedate = request.POST.get('duedate')
+        
         # Create task only if required fields are provided
         if title and status_name:
             status = Status.objects.get_or_create(name=status_name)[0]
@@ -29,7 +31,8 @@ def add_task(request):
                 title=title,
                 description=description,
                 status=status,
-                user=request.user
+                user=request.user,
+                duedate=duedate if duedate else None
             )
             messages.success(request, 'Task created successfully!')
     return redirect('board')
@@ -38,6 +41,8 @@ def update_task_status(request, task_id):
     """Update a task's status"""
     if request.method == 'POST':
         task = get_object_or_404(Task, id=task_id, user=request.user)
+        
+        # Handle status update
         new_status_name = request.POST.get('status')
 
         if new_status_name:
@@ -48,8 +53,17 @@ def update_task_status(request, task_id):
                 status = Status.objects.create(name=new_status_name)
 
             task.status = status
-            task.save()
-            messages.success(request, 'Task updated successfully!')
+        
+        # Handle other field updates
+        if 'duedate' in request.POST:
+            task.duedate = request.POST.get('duedate') or None
+        if 'title' in request.POST:
+            task.title = request.POST.get('title')
+        if 'description' in request.POST:
+            task.description = request.POST.get('description')
+            
+        task.save()
+        messages.success(request, 'Task updated successfully!')
 
     return redirect('board')
 
