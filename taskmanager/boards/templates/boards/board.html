@@ -39,25 +39,50 @@
             {% for task in tasks %}
             {% if task.status.name == "not-started" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
+                <div class="card-content p-3">
+                    <!-- Header with title and delete -->
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <button class="task-title-btn" onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)">
+                            <h5 class="card-title mb-0">{{ task.title }}</h5>
+                        </button>
+                        <button class="delete-task" data-task-id="{{ task.id }}">
+                            <span class="delete-emoji">🗑️</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Description -->
+                    <p class="task-description mb-3">{{ task.description }}</p>
+                    
+                    <!-- Metadata Footer -->
+                    <div class="task-metadata d-flex justify-content-between align-items-center">
+                        <!-- Left side metadata -->
+                        <div class="d-flex align-items-center gap-3">
                             {% if task.tag %}
-                            <span class="priority-tag 
-                                {% if task.tag == '!' %}priority-low
-                                {% elif task.tag == '!!' %}priority-medium
-                                {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                                {{ task.tag }}
-                            </span>
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">🚩</span>
+                                <span class="metadata-text 
+                                    {% if task.tag == '!' %}text-info
+                                    {% elif task.tag == '!!' %}text-warning
+                                    {% elif task.tag == '!!!' %}text-danger{% endif %}">
+                                    {{ task.tag }}
+                                </span>
+                            </div>
                             {% endif %}
-                            <h5>{{ task.title }}</h5>
+                            
+                            {% if task.duedate %}
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">📅</span>
+                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">⏰</span>
+                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
+                            </div>
                         </div>
-                        <button class="delete-task" data-task-id="{{ task.id }}">×</button>
                     </div>
                 </div>
-                <p class="task-description"
-                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)"
-                    style="cursor: pointer;">{{ task.description }}</p>
             </div>
             {% endif %}
             {% endfor %}
@@ -70,25 +95,50 @@
             {% for task in tasks %}
             {% if task.status.name == "doing" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
+                <div class="card-content p-3">
+                    <!-- Header with title and delete -->
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <button class="task-title-btn" onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)">
+                            <h5 class="card-title mb-0">{{ task.title }}</h5>
+                        </button>
+                        <button class="delete-task" data-task-id="{{ task.id }}">
+                            <span class="delete-emoji">🗑️</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Description -->
+                    <p class="task-description mb-3">{{ task.description }}</p>
+                    
+                    <!-- Metadata Footer -->
+                    <div class="task-metadata d-flex justify-content-between align-items-center">
+                        <!-- Left side metadata -->
+                        <div class="d-flex align-items-center gap-3">
                             {% if task.tag %}
-                            <span class="priority-tag 
-                                {% if task.tag == '!' %}priority-low
-                                {% elif task.tag == '!!' %}priority-medium
-                                {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                                {{ task.tag }}
-                            </span>
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">🚩</span>
+                                <span class="metadata-text 
+                                    {% if task.tag == '!' %}text-info
+                                    {% elif task.tag == '!!' %}text-warning
+                                    {% elif task.tag == '!!!' %}text-danger{% endif %}">
+                                    {{ task.tag }}
+                                </span>
+                            </div>
                             {% endif %}
-                            <h5>{{ task.title }}</h5>
+                            
+                            {% if task.duedate %}
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">📅</span>
+                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">⏰</span>
+                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
+                            </div>
                         </div>
-                        <button class="delete-task" data-task-id="{{ task.id }}">×</button>
                     </div>
                 </div>
-                <p class="task-description"
-                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)"
-                    style="cursor: pointer;">{{ task.description }}</p>
             </div>
             {% endif %}
             {% endfor %}
@@ -101,25 +151,50 @@
             {% for task in tasks %}
             {% if task.status.name == "done" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
+                <div class="card-content p-3">
+                    <!-- Header with title and delete -->
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <button class="task-title-btn" onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)">
+                            <h5 class="card-title mb-0">{{ task.title }}</h5>
+                        </button>
+                        <button class="delete-task" data-task-id="{{ task.id }}">
+                            <span class="delete-emoji">🗑️</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Description -->
+                    <p class="task-description mb-3">{{ task.description }}</p>
+                    
+                    <!-- Metadata Footer -->
+                    <div class="task-metadata d-flex justify-content-between align-items-center">
+                        <!-- Left side metadata -->
+                        <div class="d-flex align-items-center gap-3">
                             {% if task.tag %}
-                            <span class="priority-tag 
-                                {% if task.tag == '!' %}priority-low
-                                {% elif task.tag == '!!' %}priority-medium
-                                {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                                {{ task.tag }}
-                            </span>
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">🚩</span>
+                                <span class="metadata-text 
+                                    {% if task.tag == '!' %}text-info
+                                    {% elif task.tag == '!!' %}text-warning
+                                    {% elif task.tag == '!!!' %}text-danger{% endif %}">
+                                    {{ task.tag }}
+                                </span>
+                            </div>
                             {% endif %}
-                            <h5>{{ task.title }}</h5>
+                            
+                            {% if task.duedate %}
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">📅</span>
+                                <span class="metadata-text">{{ task.duedate|date:'d M' }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="metadata-item">
+                                <span class="metadata-emoji">⏰</span>
+                                <span class="metadata-text">{{ task.created_at|timesince|cut:" minutes"|cut:" minute"|cut:" hours"|cut:" hour"|cut:" days"|cut:" day"|cut:" weeks"|cut:" week"|cut:" months"|cut:" month" }} ago</span>
+                            </div>
                         </div>
-                        <button class="delete-task" data-task-id="{{ task.id }}">×</button>
                     </div>
                 </div>
-                <p class="task-description"
-                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.status.name }}`)"
-                    style="cursor: pointer;">{{ task.description }}</p>
             </div>
             {% endif %}
             {% endfor %}
@@ -400,35 +475,69 @@ h2, h5 {
 .kanban-card {
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 16px;
     border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    margin-bottom: 12px;
+    overflow: hidden;
 }
 
-.column-header {
-    display: inline-block;
-    padding: 8px 16px;
-    border-radius: 20px;
+.card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-title {
+    font-size: 15px;
+    color: #2D3748;
+}
+
+.task-description {
+    color: #4b5563;
+    font-size: 0.875rem;
+    margin-bottom: auto;
+    flex-grow: 1;
+}
+
+/* Update metadata styles */
+.task-metadata {
+    padding: 8px 0;
+    border-top: 1px solid #f0f0f0;
+    margin-top: auto;
+}
+
+.metadata-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+}
+
+.metadata-text {
+    color: #6c757d;
+    font-size: 12px;
+    letter-spacing: -0.2px;
+}
+
+.metadata-emoji {
     font-size: 14px;
-    font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 600;
-    margin-bottom: 16px;
 }
 
-.not-started {
-    background-color: #E1E4E8;
-    color: #6B7280;
+.delete-emoji {
+    font-size: 13px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
 }
 
-.doing {
-    background-color: #F0E7F6;
-    color: #7B777E;
+.delete-task {
+    background: none;
+    border: none;
+    padding: 4px;
+    margin: -4px;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
-.done {
-    background-color: #FFDCE0;
-    color: #837173;
+.delete-task:hover .delete-emoji {
+    opacity: 1;
 }
 
 .task-modal {
@@ -655,52 +764,13 @@ h2, h5 {
 }
 
 .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 4px;
+    padding: 0.75rem;
+    background: transparent;
+    border-bottom: none;
 }
 
-.delete-task {
-    background: none;
-    border: none;
-    color: #9CA3AF;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0 4px;
-    margin: -4px -4px 0 0;
-    line-height: 1;
-}
-
-.delete-task:hover {
-    color: #EF4444;
-}
-
-.task-details-grid {
-    display: grid;
-    gap: 1.5rem;
-    padding: 1rem;
-}
-
-.detail-item {
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 1rem;
-}
-
-.detail-label {
-    font-weight: 600;
-    color: #4B5563;
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.025em;
-}
-
-.detail-value {
-    color: #1F2937;
-    font-size: 1rem;
-    margin: 0;
-    line-height: 1.5;
+.card-body {
+    padding: 0.5rem 1rem 1rem;
 }
 
 /* Timeline Styles */
@@ -978,6 +1048,118 @@ h2, h5 {
 .priority-high {
     background-color: #FEE2E2;
     color: #B91C1C;
+}
+
+/* Add styles for the new metadata layout */
+.task-metadata {
+    padding: 8px 0;
+    border-top: 1px solid #f0f0f0;
+    margin-top: auto;
+}
+
+.metadata-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+}
+
+.metadata-item i {
+    font-size: 12px;
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.metadata-text {
+    color: #6c757d;
+}
+
+/* Update card styles */
+.kanban-card {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 0.75rem;
+    background: transparent;
+    border-bottom: none;
+}
+
+.card-body {
+    padding: 0.5rem 1rem 1rem;
+}
+
+.task-description {
+    color: #4b5563;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+/* Update metadata styles for emojis */
+.metadata-emoji {
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+.delete-emoji {
+    font-size: 14px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.delete-task {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.delete-task:hover .delete-emoji {
+    opacity: 1;
+}
+
+.metadata-item {
+    display: flex;
+    align-items: center;
+    color: #6c757d;
+    font-size: 12px;
+}
+
+/* Add styles for the clickable title */
+.task-title-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    outline: none !important;
+}
+
+.task-title-btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.task-title-btn:focus-visible {
+    outline: 2px solid #3b82f6 !important;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.task-title-btn:hover {
+    opacity: 0.7;
+}
+
+.task-title-btn h5 {
+    color: #2D3748;
 }
 </style>
 
