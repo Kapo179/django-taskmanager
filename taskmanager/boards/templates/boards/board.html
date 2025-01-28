@@ -269,143 +269,118 @@
 
 <!-- Task Details Modal -->
 <div class="modal fade" id="taskDetailsModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header bg-light border-bottom shadow-sm">
-        <h5 class="modal-title" id="taskDetailsModalLabel">
-          <i class="bi bi-card-checklist me-2"></i>Task Details
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-0">
-        <div class="row g-0">
-          <!-- Task Info Column -->
-          <div class="col-md-5 border-end">
-            <div class="task-info p-4">
-              <div class="detail-item mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h6 class="detail-label text-uppercase text-muted mb-0">
-                    <i class="bi bi-type-h1 me-2"></i>Title
-                  </h6>
-                  <button class="btn btn-link btn-sm p-0 edit-task-btn" data-field="title">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                </div>
-                <p id="modalTaskTitle" class="detail-value fs-5 mb-0"></p>
-              </div>
-
-              <div class="detail-item mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h6 class="detail-label text-uppercase text-muted mb-0">
-                    <i class="bi bi-text-paragraph me-2"></i>Description
-                  </h6>
-                  <button class="btn btn-link btn-sm p-0 edit-task-btn" data-field="description">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                </div>
-                <p id="modalTaskDescription" class="detail-value"></p>
-              </div>
-
-              <div class="detail-item mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h6 class="detail-label text-uppercase text-muted mb-0">
-                    <i class="bi bi-tag me-2"></i>Priority
-                  </h6>
-                  <button class="btn btn-link btn-sm p-0 edit-task-btn" data-field="tag">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                </div>
-                <span id="modalTaskTag" class="priority-tag 
-                    {% if task.tag == '!' %}priority-low
-                    {% elif task.tag == '!!' %}priority-medium
-                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
-                </span>
-              </div>
-
-              <div class="detail-item mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h6 class="detail-label text-uppercase text-muted mb-0">
-                    <i class="bi bi-calendar-event me-2"></i>Due Date
-                  </h6>
-                  <button class="btn btn-link btn-sm p-0 edit-task-btn" data-field="duedate">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                </div>
-                <p id="modalTaskDueDate" class="detail-value"></p>
-              </div>
-
-              <div class="detail-item">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h6 class="detail-label text-uppercase text-muted mb-0">
-                    <i class="bi bi-clock-history me-2"></i>Status
-                  </h6>
-                </div>
-                <select class="form-select" id="modalTaskStatusSelect">
-                  <option value="not-started">Not Started</option>
-                  <option value="doing">Doing</option>
-                  <option value="done">Done</option>
-                </select>
-              </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <!-- Modal Header -->
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title" id="taskDetailsModalLabel">Task Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-          </div>
-          
-          <!-- Timeline Column -->
-          <div class="col-md-7 bg-light">
-            <div class="p-4">
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                <h6 class="text-uppercase text-muted mb-0">
-                  <i class="bi bi-clock-history me-2"></i>Activity Timeline
-                </h6>
-                <button class="btn btn-sm btn-primary add-event-btn" onclick="showAddEventForm()">
-                  <i class="bi bi-plus-lg me-2"></i>Add Event
-                </button>
-              </div>
 
-              <div class="vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
-                <!-- Created Event -->
-                <div class="vertical-timeline-item vertical-timeline-element">
-                  <div>
-                    <span class="vertical-timeline-element-icon bounce-in">
-                      <i class="badge badge-dot badge-dot-xl bg-success"></i>
-                    </span>
-                    <div class="vertical-timeline-element-content bounce-in shadow-sm">
-                      <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="timeline-title text-success mb-0">Task Created</h6>
-                        <span class="badge bg-light text-dark" id="modalTaskCreatedAt"></span>
-                      </div>
-                      <p class="text-muted mt-2 mb-0">Task was created</p>
+            <!-- Modal Body -->
+            <div class="modal-body pt-2">
+                <!-- Title Section -->
+                <div class="task-detail-section mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <input type="text" class="form-control-plaintext form-control-lg fw-bold" id="modalTaskTitle" readonly>
+                        <button class="btn btn-link btn-sm p-0 ms-2 edit-task-btn" data-field="title">
+                            <i class="bi bi-pencil"></i>
+                        </button>
                     </div>
-                  </div>
                 </div>
 
-                <!-- Status Update Event -->
-                <div class="vertical-timeline-item vertical-timeline-element">
-                  <div>
-                    <span class="vertical-timeline-element-icon bounce-in">
-                      <i class="badge badge-dot badge-dot-xl bg-primary"></i>
-                    </span>
-                    <div class="vertical-timeline-element-content bounce-in shadow-sm">
-                      <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="timeline-title text-primary mb-0">Status Updated</h6>
-                        <span class="badge bg-light text-dark" id="modalTaskUpdatedAt"></span>
-                      </div>
-                      <p class="text-muted mt-2 mb-0">Status changed to <span class="fw-bold" id="modalTaskStatus"></span></p>
+                <!-- Description Section -->
+                <div class="task-detail-section mb-4">
+                    <label class="text-muted small text-uppercase">Description</label>
+                    <div class="d-flex align-items-start">
+                        <p class="form-text mb-0" id="modalTaskDescription"></p>
+                        <button class="btn btn-link btn-sm p-0 ms-2 edit-task-btn" data-field="description">
+                            <i class="bi bi-pencil"></i>
+                        </button>
                     </div>
-                  </div>
                 </div>
-              </div>
+
+                <!-- Metadata Grid -->
+                <div class="row g-3 mb-4">
+                    <!-- Priority -->
+                    <div class="col-6">
+                        <div class="task-detail-section">
+                            <label class="text-muted small text-uppercase d-block mb-2">Priority</label>
+                            <div class="d-flex align-items-center">
+                                <span id="modalTaskTag" class="priority-tag"></span>
+                                <button class="btn btn-link btn-sm p-0 ms-2 edit-task-btn" data-field="tag">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Due Date -->
+                    <div class="col-6">
+                        <div class="task-detail-section">
+                            <label class="text-muted small text-uppercase d-block mb-2">Due Date</label>
+                            <div class="d-flex align-items-center">
+                                <span id="modalTaskDueDate" class="text-body"></span>
+                                <button class="btn btn-link btn-sm p-0 ms-2 edit-task-btn" data-field="duedate">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-6">
+                        <div class="task-detail-section">
+                            <label class="text-muted small text-uppercase d-block mb-2">Status</label>
+                            <select class="form-select form-select-sm" id="modalTaskStatusSelect">
+                                <option value="not-started">Not Started</option>
+                                <option value="doing">Doing</option>
+                                <option value="done">Done</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Created Date -->
+                    <div class="col-6">
+                        <div class="task-detail-section">
+                            <label class="text-muted small text-uppercase d-block mb-2">Created</label>
+                            <span id="modalTaskCreatedAt" class="text-body"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="task-detail-section">
+                    <label class="text-muted small text-uppercase d-block mb-3">Activity</label>
+                    <ul class="timeline-3">
+                        <li>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="timeline-title">Task Created</span>
+                                    <span class="text-muted small" id="modalTaskCreatedAtTime"></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="timeline-title">Status Updated</span>
+                                    <span class="text-muted small" id="modalTaskUpdatedAt"></span>
+                                </div>
+                                <p class="text-muted small mb-0">Status changed to <span id="modalTaskStatus" class="fw-medium"></span></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-          </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer border-0">
+                <button type="button" class="btn-close-modal" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn-submit save-changes-btn">Save Changes</button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer bg-light">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary save-changes-btn">
-          <i class="bi bi-check2 me-2"></i>Save Changes
-        </button>
-      </div>
     </div>
-  </div>
 </div>
 
 <!-- Here's the CSS for the kanban board-->
@@ -774,392 +749,150 @@ h2, h5 {
 }
 
 /* Timeline Styles */
-.vertical-timeline {
-    width: 100%;
+ul.timeline-3 {
+    list-style-type: none;
     position: relative;
-    padding: 1.5rem 0 1rem;
+    padding-left: 0;
 }
 
-.vertical-timeline::before {
-    content: '';
+ul.timeline-3:before {
+    content: " ";
+    background: #d4d9df;
+    display: inline-block;
     position: absolute;
-    top: 0;
-    left: 67px;
+    left: 29px;
+    width: 2px;
     height: 100%;
-    width: 4px;
-    background: #e9ecef;
-    border-radius: .25rem;
+    z-index: 400;
 }
 
-.vertical-timeline-element {
-    position: relative;
-    margin: 0 0 1rem;
-}
-
-.vertical-timeline--animate .vertical-timeline-element-icon.bounce-in {
-    visibility: visible;
-    animation: cd-bounce-1 .8s;
-}
-
-.vertical-timeline-element-icon {
-    position: absolute;
-    top: 0;
-    left: 60px;
-}
-
-.vertical-timeline-element-icon .badge-dot-xl {
-    box-shadow: 0 0 0 5px #fff;
-}
-
-.badge-dot-xl {
-    width: 18px;
-    height: 18px;
+ul.timeline-3 > li {
+    margin: 20px 0;
+    padding-left: 60px;
     position: relative;
 }
 
-.badge-dot-xl::before {
-    content: '';
-    width: 10px;
-    height: 10px;
-    border-radius: .25rem;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin: -5px 0 0 -5px;
-    background: #fff;
-}
-
-.vertical-timeline-element-content {
-    position: relative;
-    margin-left: 90px;
-    font-size: .8rem;
-}
-
-.vertical-timeline-element-content .timeline-title {
-    font-size: .8rem;
-    text-transform: uppercase;
-    margin: 0 0 .5rem;
-    padding: 2px 0 0;
-    font-weight: bold;
-}
-
-.vertical-timeline-element-content .vertical-timeline-element-date {
-    display: block;
-    position: absolute;
-    left: -90px;
-    top: 0;
-    padding-right: 10px;
-    text-align: right;
-    color: #adb5bd;
-    font-size: .7619rem;
-    white-space: nowrap;
-}
-
-.vertical-timeline-element-content:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-.card {
-    box-shadow: 0 0.46875rem 2.1875rem rgba(4,9,20,0.03),
-                0 0.9375rem 1.40625rem rgba(4,9,20,0.03),
-                0 0.25rem 0.53125rem rgba(4,9,20,0.05),
-                0 0.125rem 0.1875rem rgba(4,9,20,0.03);
-    border-width: 0;
-    transition: all .2s;
-}
-
-/* Animation for timeline icons */
-@keyframes cd-bounce-1 {
-    0% {
-        opacity: 0;
-        transform: scale(0.5);
-    }
-    60% {
-        opacity: 1;
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-/* Badge colors */
-.badge-success {
-    background-color: #3ac47d;
-}
-
-.badge-primary {
-    background-color: #3f6ad8;
-}
-
-.badge-warning {
-    background-color: #f7b924;
-}
-
-.badge-danger {
-    background-color: #d92550;
-}
-
-/* Adjust add event button */
-.add-event-btn {
-    width: 100%;
-    margin-top: 0.5rem;
-}
-
-/* Updated Timeline Styles */
-.vertical-timeline-element-content {
+ul.timeline-3 > li:before {
+    content: " ";
     background: white;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    position: relative;
-    margin-left: 90px;
-    transition: all .2s ease;
+    display: inline-block;
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid #22c0e8;
+    left: 20px;
+    width: 20px;
+    height: 20px;
+    z-index: 400;
 }
 
-.vertical-timeline-element-content:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.1) !important;
+ul.timeline-3 > li:first-child:before {
+    border-color: #28a745;
 }
 
-.vertical-timeline-element-date {
+.timeline-content {
+    padding: 5px 0;
+}
+
+.timeline-title {
     font-size: 0.875rem;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+/* Form Controls */
+.form-select-sm {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.priority-tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Modal Styles */
+.modal-content {
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal-header {
+    padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+}
+
+.task-detail-section label {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
     color: #6c757d;
 }
 
-.detail-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
+.form-control-plaintext {
+    padding: 0;
+    font-size: 1.5rem;
+    color: #2d3748;
 }
 
-.detail-value {
-    color: #2d3748;
+.form-control-plaintext:focus {
+    outline: none;
 }
 
 .edit-task-btn {
     color: #6c757d;
-    transition: color 0.2s ease;
+    opacity: 0.5;
+    transition: all 0.2s ease;
 }
 
 .edit-task-btn:hover {
     color: #0d6efd;
-}
-
-/* Custom scrollbar for timeline */
-.vertical-timeline::-webkit-scrollbar {
-    width: 6px;
-}
-
-.vertical-timeline::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-.vertical-timeline::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
-}
-
-.vertical-timeline::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-}
-
-/* Smooth transitions */
-.modal.fade .modal-dialog {
-    transition: transform .2s ease-out;
-}
-
-.badge {
-    transition: all .2s ease;
-}
-
-.badge:hover {
-    transform: translateY(-1px);
-}
-
-/* Custom styles for the date input */
-.custom-date-input {
-    border: 1px solid #ced4da;
-    border-right: none;
-    padding: 0.375rem 0.75rem;
-    line-height: 1.5;
-    color: #212529;
-    background-color: #fff;
-    border-radius: 0.25rem 0 0 0.25rem;
-    cursor: pointer;
-}
-
-.custom-date-input:focus {
-    border-color: #86b7fe;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-/* Hide the default calendar icon in Webkit browsers */
-.custom-date-input::-webkit-calendar-picker-indicator {
-    background: transparent;
-    bottom: 0;
-    color: transparent;
-    cursor: pointer;
-    height: auto;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: auto;
-}
-
-.input-group-text {
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    border-left: none;
-    color: #6c757d;
-    cursor: pointer;
-}
-
-.input-group-text:hover {
-    background-color: #e9ecef;
-    color: #495057;
-}
-
-.input-group:hover .custom-date-input {
-    border-color: #b9bfc4;
-}
-
-.priority-tag {
-    display: inline-block;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-right: 8px;
-}
-
-.priority-low {
-    background-color: #E5F6FD;
-    color: #0369A1;
-}
-
-.priority-medium {
-    background-color: #FEF3C7;
-    color: #92400E;
-}
-
-.priority-high {
-    background-color: #FEE2E2;
-    color: #B91C1C;
-}
-
-/* Add styles for the new metadata layout */
-.task-metadata {
-    padding: 8px 0;
-    border-top: 1px solid #f0f0f0;
-    margin-top: auto;
-}
-
-.metadata-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0 4px;
-}
-
-.metadata-item i {
-    font-size: 12px;
-    width: 16px;
-    height: 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.metadata-text {
-    color: #6c757d;
-}
-
-/* Update card styles */
-.kanban-card {
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.card-header {
-    padding: 0.75rem;
-    background: transparent;
-    border-bottom: none;
-}
-
-.card-body {
-    padding: 0.5rem 1rem 1rem;
-}
-
-.task-description {
-    color: #4b5563;
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-}
-
-/* Update metadata styles for emojis */
-.metadata-emoji {
-    font-size: 14px;
-    margin-right: 4px;
-}
-
-.delete-emoji {
-    font-size: 14px;
-    opacity: 0.6;
-    transition: opacity 0.2s ease;
-}
-
-.delete-task {
-    background: none;
-    border: none;
-    padding: 4px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.delete-task:hover .delete-emoji {
     opacity: 1;
 }
 
-.metadata-item {
-    display: flex;
-    align-items: center;
-    color: #6c757d;
-    font-size: 12px;
-}
-
-/* Add styles for the clickable title */
-.task-title-btn {
+/* Update button styles to match task creation modal */
+.btn-close-modal {
     background: none;
-    border: none;
-    padding: 0;
-    text-align: left;
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #6b7280;
     cursor: pointer;
-    transition: opacity 0.2s ease;
-    outline: none !important;
+    transition: all 0.2s ease;
 }
 
-.task-title-btn:focus {
-    outline: none !important;
-    box-shadow: none !important;
+.btn-close-modal:hover {
+    background: #f3f4f6;
+    color: #374151;
 }
 
-.task-title-btn:focus-visible {
-    outline: 2px solid #3b82f6 !important;
-    outline-offset: 2px;
-    border-radius: 4px;
+.btn-submit {
+    background: #212121;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.task-title-btn:hover {
-    opacity: 0.7;
+.btn-submit:hover {
+    background: #424242;
 }
 
-.task-title-btn h5 {
-    color: #2D3748;
+/* Remove old button styles */
+.btn-light, .btn-primary {
+    display: none;
 }
 </style>
 
