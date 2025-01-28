@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
 
+
 class CustomUserAdmin(UserAdmin):
     """
     Custom admin interface configuration for the CustomUser model
@@ -24,5 +25,6 @@ class CustomUserAdmin(UserAdmin):
     # Fields that can be used to filter users
     list_filter = ('role', 'is_active')
     search_fields = ('username', 'email')
+
 
 admin.site.register(CustomUser, CustomUserAdmin)

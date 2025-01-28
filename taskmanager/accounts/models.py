@@ -6,6 +6,7 @@ It extends Django's built-in user model to add role-based functionality.
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class CustomUser(AbstractUser):
     """
     Custom user model extending Django's AbstractUser

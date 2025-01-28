@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.utils.html import format_html
 from .models import CustomUser
 
+
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
@@ -22,7 +23,7 @@ class CustomUserCreationForm(UserCreationForm):
             'id': 'id_signup_password2',
             'aria-label': 'Password confirmation'
         })
-        
+
         # Update help texts
         self.fields['password1'].help_text = format_html(
             """
@@ -34,4 +35,6 @@ class CustomUserCreationForm(UserCreationForm):
             """
         )
         self.fields['username'].help_text = "Letters, digits and @/./+/-/_ "
-        self.fields['password2'].help_text = "Enter the same password as before, for verification." 
+        self.fields['password2'].help_text = (
+            "Enter the same password as before, for verification."
+        ) 
