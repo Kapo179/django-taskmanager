@@ -2,6 +2,9 @@
 {% load static %}
 
 {% block content %}
+<!-- Add Quill.js CSS in the head -->
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet">
+
 <div class="container my-4">
     <!-- Back to Board Link -->
     <a href="{% url 'board' %}" class="back-link mb-3 d-inline-block">
@@ -53,10 +56,17 @@
             </div>
         </div>
 
-        <!-- Description Section -->
+        <!-- Description Section with Quill Editor -->
         <div class="description-section">
-            <h6 class="text-muted mb-3">Task Details</h6>
-            <p class="mb-0">{{ task.description }}</p>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-muted">Task Details</h6>
+                <button class="btn-save-details" onclick="saveTaskDetails()" style="display: none;">
+                    Save Changes
+                </button>
+            </div>
+            <div id="task-details-editor">
+                {{ task.description|safe }}
+            </div>
         </div>
 
         <!-- Updates Section -->
@@ -245,21 +255,104 @@
         font-size: 0.875rem;
         cursor: pointer;
     }
+
+    /* Quill Editor Styles */
+    .ql-editor {
+        min-height: 120px;
+        font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 0.875rem;
+    }
+
+    .ql-toolbar.ql-snow {
+        border-color: #e5e7eb;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+    }
+
+    .ql-container.ql-snow {
+        border-color: #e5e7eb;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+    }
+
+    .update-form .ql-editor {
+        min-height: 80px;
+    }
+
+    /* Hide the original textarea */
+    .quill-hidden {
+        display: none;
+    }
 </style>
 
+<!-- Include Quill.js library -->
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.min.js"></script>
+
 <script>
+// Initialize Quill for Task Details
+const taskDetailsQuill = new Quill('#task-details-editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['clean']
+        ]
+    },
+    placeholder: 'Write task details here...'
+});
+
+// Enable editing and show save button when content changes
+taskDetailsQuill.on('text-change', function() {
+    document.querySelector('.btn-save-details').style.display = 'block';
+});
+
+// Function to save task details
+function saveTaskDetails() {
+    const content = taskDetailsQuill.root.innerHTML;
+    const taskId = '{{ task.id }}';
+    
+    fetch(`/task/${taskId}/update/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: `description=${encodeURIComponent(content)}`
+    })
+    .then(response => {
+        if (response.ok) {
+            document.querySelector('.btn-save-details').style.display = 'none';
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 function showUpdateForm() {
     const timeline = document.getElementById('updatesTimeline');
     const formHtml = `
         <div class="update-form">
-            <textarea placeholder="Write your update here..."></textarea>
-            <div class="update-form-buttons">
+            <div id="update-editor"></div>
+            <div class="update-form-buttons mt-3">
                 <button class="btn-cancel" onclick="cancelUpdate(this)">Cancel</button>
                 <button class="btn-save" onclick="saveUpdate(this)">Save</button>
             </div>
         </div>
     `;
     timeline.insertAdjacentHTML('afterbegin', formHtml);
+
+    // Initialize Quill for the new update form
+    const updateQuill = new Quill('#update-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['clean']
+            ]
+        },
+        placeholder: 'Write your update here...'
+    });
 }
 
 function cancelUpdate(button) {
@@ -269,8 +362,10 @@ function cancelUpdate(button) {
 
 function saveUpdate(button) {
     const form = button.closest('.update-form');
-    const content = form.querySelector('textarea').value;
-    if (!content.trim()) return;
+    const quillEditor = form.querySelector('.ql-editor');
+    const content = quillEditor.innerHTML;
+    
+    if (!content.trim() || content === '<p><br></p>') return;
 
     const date = new Date().toLocaleString();
     const updateHtml = `
