@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Task, Status
+from .models import Task, Status, TaskUpdate
 from django.contrib import messages
+from django.http import JsonResponse
+from django.utils import timezone
 
 
 @login_required  # Ensures user is authenticated before accessing any boards
@@ -89,3 +91,25 @@ def delete_task(request, task_id):
 def task_detail(request, task_id):
     task = get_object_or_404(Task, id=task_id, user=request.user)
     return render(request, 'boards/task_detail.html', {'task': task})
+
+
+@login_required
+def add_task_update(request, task_id):
+    """Add an update/comment to a task"""
+    if request.method == 'POST':
+        task = get_object_or_404(Task, id=task_id, user=request.user)
+        content = request.POST.get('content')
+        
+        if content:
+            update = TaskUpdate.objects.create(
+                task=task,
+                content=content
+            )
+            # Return JSON response for AJAX request
+            return JsonResponse({
+                'status': 'success',
+                'created_at': timezone.localtime(update.created_at).strftime("%b %d, %Y %H:%M")
+            })
+        
+    # Return error response if something went wrong
+    return JsonResponse({'status': 'error'}, status=400)

@@ -66,3 +66,27 @@ class Task(models.Model):
     def __str__(self):
         """Return string representation of the task."""
         return self.title
+
+
+class TaskUpdate(models.Model):
+    """
+    Model representing updates/comments on a task.
+    
+    Each update is associated with a task and contains content
+    and timestamp information.
+    """
+    task = models.ForeignKey(
+        Task,
+        on_delete=models.CASCADE,
+        related_name='updates'
+    )
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        """Return string representation of the update."""
+        return f"Update on {self.task.title} at {self.created_at}"

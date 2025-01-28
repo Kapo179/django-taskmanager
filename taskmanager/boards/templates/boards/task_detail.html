@@ -80,7 +80,14 @@
                 </button>
             </div>
             <div id="updatesTimeline" class="updates-timeline">
-                <!-- Updates will be added here dynamically -->
+                {% for update in task.updates.all %}
+                <div class="update-entry">
+                    <div class="update-content">
+                        <div class="update-date">{{ update.created_at|date:"M d, Y H:i" }}</div>
+                        <div>{{ update.content|safe }}</div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -406,17 +413,39 @@ function saveUpdate(button) {
     
     if (!content.trim() || content === '<p><br></p>') return;
 
-    const date = new Date().toLocaleString();
-    const updateHtml = `
-        <div class="update-entry">
-            <div class="update-content">
-                <div class="update-date">${date}</div>
-                <div>${content}</div>
+    const taskId = '{{ task.id }}';
+    
+    // Save update to the database
+    fetch(`/task/${taskId}/add-update/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: `content=${encodeURIComponent(content)}`
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok');
+    })
+    .then(data => {
+        const updateHtml = `
+            <div class="update-entry">
+                <div class="update-content">
+                    <div class="update-date">${data.created_at}</div>
+                    <div>${content}</div>
+                </div>
             </div>
-        </div>
-    `;
-    form.insertAdjacentHTML('afterend', updateHtml);
-    form.remove();
+        `;
+        form.insertAdjacentHTML('afterend', updateHtml);
+        form.remove();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save update. Please try again.');
+    });
 }
 
 // Add additional protection against tooltips

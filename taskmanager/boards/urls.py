@@ -25,4 +25,8 @@ urlpatterns = [
          name='delete_task'),
     # Handle task details
     path('task/<int:task_id>/', views.task_detail, name='task_detail'),
+    # Handle task updates
+    path('task/<int:task_id>/add-update/',
+         views.add_task_update,
+         name='add_task_update'),
 ]
