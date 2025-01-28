@@ -40,15 +40,25 @@
           {% if task.status.name == "not-started" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
                 <div class="card-content p-3">
-                    <!-- Header with title and delete -->
+                    <!-- Header with title and priority -->
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                            <h5 class="card-title mb-0">{{ task.title }}</h5>
-                        </a>
+                        <div class="d-flex align-items-center gap-2">
+                            {% if task.tag %}
+                                <span class="priority-tag 
+                                    {% if task.tag == '!' %}priority-low
+                                    {% elif task.tag == '!!' %}priority-medium
+                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                                    {{ task.tag }}
+                                </span>
+                            {% endif %}
+                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
+                                <h5 class="card-title mb-0">{{ task.title }}</h5>
+                            </a>
+                        </div>
                         <button class="delete-task" data-task-id="{{ task.id }}">
                             <span class="delete-emoji">🗑️</span>
                         </button>
-                </div>
+                    </div>
                     
                     <!-- Description -->
                     <div class="task-description mb-3 ql-editor" style="padding: 0;">
@@ -59,18 +69,6 @@
                     <div class="task-metadata d-flex justify-content-between align-items-center">
                         <!-- Left side metadata -->
                         <div class="d-flex align-items-center gap-3">
-                            {% if task.tag %}
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">🚩</span>
-                                <span class="metadata-text 
-                                    {% if task.tag == '!' %}text-info
-                                    {% elif task.tag == '!!' %}text-warning
-                                    {% elif task.tag == '!!!' %}text-danger{% endif %}">
-                                    {{ task.tag }}
-                                </span>
-              </div>
-                            {% endif %}
-                            
                             {% if task.duedate %}
                             <div class="metadata-item">
                                 <span class="metadata-emoji">📅</span>
@@ -98,15 +96,25 @@
           {% if task.status.name == "doing" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
                 <div class="card-content p-3">
-                    <!-- Header with title and delete -->
+                    <!-- Header with title and priority -->
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                            <h5 class="card-title mb-0">{{ task.title }}</h5>
-                        </a>
+                        <div class="d-flex align-items-center gap-2">
+                            {% if task.tag %}
+                                <span class="priority-tag 
+                                    {% if task.tag == '!' %}priority-low
+                                    {% elif task.tag == '!!' %}priority-medium
+                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                                    {{ task.tag }}
+                                </span>
+                            {% endif %}
+                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
+                                <h5 class="card-title mb-0">{{ task.title }}</h5>
+                            </a>
+                        </div>
                         <button class="delete-task" data-task-id="{{ task.id }}">
                             <span class="delete-emoji">🗑️</span>
                         </button>
-                </div>
+                    </div>
                     
                     <!-- Description -->
                     <div class="task-description mb-3 ql-editor" style="padding: 0;">
@@ -117,18 +125,6 @@
                     <div class="task-metadata d-flex justify-content-between align-items-center">
                         <!-- Left side metadata -->
                         <div class="d-flex align-items-center gap-3">
-                            {% if task.tag %}
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">🚩</span>
-                                <span class="metadata-text 
-                                    {% if task.tag == '!' %}text-info
-                                    {% elif task.tag == '!!' %}text-warning
-                                    {% elif task.tag == '!!!' %}text-danger{% endif %}">
-                                    {{ task.tag }}
-                                </span>
-              </div>
-                            {% endif %}
-                            
                             {% if task.duedate %}
                             <div class="metadata-item">
                                 <span class="metadata-emoji">📅</span>
@@ -156,15 +152,25 @@
           {% if task.status.name == "done" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
                 <div class="card-content p-3">
-                    <!-- Header with title and delete -->
+                    <!-- Header with title and priority -->
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                            <h5 class="card-title mb-0">{{ task.title }}</h5>
-                        </a>
+                        <div class="d-flex align-items-center gap-2">
+                            {% if task.tag %}
+                                <span class="priority-tag 
+                                    {% if task.tag == '!' %}priority-low
+                                    {% elif task.tag == '!!' %}priority-medium
+                                    {% elif task.tag == '!!!' %}priority-high{% endif %}">
+                                    {{ task.tag }}
+                                </span>
+                            {% endif %}
+                            <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
+                                <h5 class="card-title mb-0">{{ task.title }}</h5>
+                            </a>
+                        </div>
                         <button class="delete-task" data-task-id="{{ task.id }}">
                             <span class="delete-emoji">🗑️</span>
                         </button>
-                </div>
+                    </div>
                     
                     <!-- Description -->
                     <div class="task-description mb-3 ql-editor" style="padding: 0;">
@@ -175,18 +181,6 @@
                     <div class="task-metadata d-flex justify-content-between align-items-center">
                         <!-- Left side metadata -->
                         <div class="d-flex align-items-center gap-3">
-                            {% if task.tag %}
-                            <div class="metadata-item">
-                                <span class="metadata-emoji">🚩</span>
-                                <span class="metadata-text 
-                                    {% if task.tag == '!' %}text-info
-                                    {% elif task.tag == '!!' %}text-warning
-                                    {% elif task.tag == '!!!' %}text-danger{% endif %}">
-                                    {{ task.tag }}
-                                </span>
-              </div>
-                            {% endif %}
-                            
                             {% if task.duedate %}
                             <div class="metadata-item">
                                 <span class="metadata-emoji">📅</span>
@@ -917,6 +911,29 @@ label {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 1px #3b82f6;
+}
+
+/* Priority Tag Styles */
+.priority-tag {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.priority-low {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+}
+
+.priority-medium {
+    background-color: #FFF3E0;
+    color: #EF6C00;
+}
+
+.priority-high {
+    background-color: #FFEBEE;
+    color: #C62828;
 }
 </style>
 

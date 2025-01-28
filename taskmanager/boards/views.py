@@ -23,6 +23,7 @@ def add_task(request):
         description = request.POST.get('description')
         status_name = request.POST.get('status')
         duedate = request.POST.get('duedate')
+        tag = request.POST.get('tag')  # Get the tag value from the form
         
         # Create task only if required fields are provided
         if title and status_name:
@@ -32,10 +33,12 @@ def add_task(request):
                 description=description,
                 status=status,
                 user=request.user,
-                duedate=duedate if duedate else None
+                duedate=duedate if duedate else None,
+                tag=tag if tag else ''  # Set the tag, defaulting to empty string if not provided
             )
             messages.success(request, 'Task created successfully!')
     return redirect('board')
+
 @login_required
 def update_task_status(request, task_id):
     """Update a task's status"""
