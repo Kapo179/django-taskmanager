@@ -59,22 +59,22 @@
         <!-- Description Section with Quill Editor -->
         <div class="description-section">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="text-muted">Task Details</h6>
+                <h3 class="text-muted">Task Details</h3>
                 <button class="btn-save-details" onclick="saveTaskDetails()" style="display: none;">
                     Save Changes
                 </button>
             </div>
             <div id="task-details-editor">
-                {{ task.description|safe }}
+                    {{ task.description|safe }}
+                </div>
             </div>
-        </div>
 
         <!-- Updates Section -->
         <div class="updates-section mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="text-muted mb-0">
+                <h3 class="text-muted mb-0">
                     <span class="info-emoji">📝</span> Updates
-                </h6>
+                </h3>
                 <button class="btn-add-update" onclick="showUpdateForm()">
                     + Add Update
                 </button>
@@ -283,6 +283,29 @@
     .quill-hidden {
         display: none;
     }
+
+    .description-section h3, .updates-section h3 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        margin: 0;
+    }
+
+    /* Hide Quill tooltips completely */
+    .ql-tooltip {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+    }
+
+    /* Hide any tooltip-related elements */
+    .ql-tooltip * {
+        display: none !important;
+    }
 </style>
 
 <!-- Include Quill.js library -->
@@ -290,17 +313,39 @@
 
 <script>
 // Initialize Quill for Task Details
-const taskDetailsQuill = new Quill('#task-details-editor', {
+const quillConfig = {
     theme: 'snow',
     modules: {
-        toolbar: [
-            ['bold', 'italic', 'underline'],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            ['clean']
-        ]
+        toolbar: {
+            container: [
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['clean']
+            ]
+        },
+        keyboard: {
+            bindings: {
+                tab: {
+                    key: 9,
+                    handler: function() {
+                        return true;
+                    }
+                }
+            }
+        },
+        // Explicitly disable link module
+        clipboard: {
+            matchVisual: false
+        },
+        link: false,
+        formula: false,
+        video: false
     },
     placeholder: 'Write task details here...'
-});
+};
+
+// Initialize editors with the new config
+const taskDetailsQuill = new Quill('#task-details-editor', quillConfig);
 
 // Enable editing and show save button when content changes
 taskDetailsQuill.on('text-change', function() {
@@ -328,6 +373,7 @@ function saveTaskDetails() {
     .catch(error => console.error('Error:', error));
 }
 
+// Initialize Quill for the new update form
 function showUpdateForm() {
     const timeline = document.getElementById('updatesTimeline');
     const formHtml = `
@@ -341,16 +387,9 @@ function showUpdateForm() {
     `;
     timeline.insertAdjacentHTML('afterbegin', formHtml);
 
-    // Initialize Quill for the new update form
+    // Initialize update editor with the same config
     const updateQuill = new Quill('#update-editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                ['bold', 'italic'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['clean']
-            ]
-        },
+        ...quillConfig,
         placeholder: 'Write your update here...'
     });
 }
@@ -379,5 +418,29 @@ function saveUpdate(button) {
     form.insertAdjacentHTML('afterend', updateHtml);
     form.remove();
 }
+
+// Add additional protection against tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    // Remove any existing tooltips
+    const tooltips = document.querySelectorAll('.ql-tooltip');
+    tooltips.forEach(tooltip => tooltip.remove());
+    
+    // Create observer to remove tooltips if they appear
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+                if (node.classList && node.classList.contains('ql-tooltip')) {
+                    node.remove();
+                }
+            });
+        });
+    });
+
+    // Start observing the document for tooltip elements
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+});
 </script>
 {% endblock %}

@@ -16,29 +16,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 {% block content %}
-<div class="container my-4">
-  <div class="info-container">
+<main role="main" class="container my-4">
+  <header role="banner" class="info-container">
+    <h1>Task Manager</h1>
     <h2>Welcome, {{ request.user.username }}</h2>
     <p class="subheading">Manage your tasks below</p>
-  </div>
+  </header>
 
-  <div class="kanban-container d-flex justify-content-between">
+  <section role="region" aria-label="Kanban Board" class="kanban-container d-flex justify-content-between">
     <!-- below are the columns: Not Started, Doing, Done -->
     <!-- class="kanban-column" = the column -->
     <!-- class="column-header" = the header of the column -->
     <!-- class="kanban-card" = the card in the column -->
     <!-- class="column-header 'not-started' 'doing' 'done' " = targets a specific column -->
 
-    <div class="kanban-column">
+    <div class="kanban-column" role="region" aria-label="Not Started Tasks">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <span class="column-header not-started">Not Started</span>
-            <button class="add-task-btn" style="color: #6B7280; background: none; border: none; cursor: pointer;">+ Add
-                Task</button>
+            <button class="add-task-btn" style="color: #374151; background: none; border: none; cursor: pointer;" aria-label="Add New Task">+ Add Task</button>
       </div>
-      <div class="task-list" data-status="not-started">
+      <div class="task-list" data-status="not-started" role="list">
         {% for task in tasks %}
           {% if task.status.name == "not-started" %}
-            <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
+            <div class="kanban-card mb-3" data-task-id="{{ task.id }}" role="listitem">
                 <div class="card-content p-3">
                     <!-- Header with title and priority -->
                     <div class="d-flex justify-content-between align-items-start mb-2">
@@ -52,7 +52,7 @@
                                 </span>
                             {% endif %}
                             <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                                <h5 class="card-title mb-0">{{ task.title }}</h5>
+                                <p class="card-title mb-0">{{ task.title }}</p>
                             </a>
                         </div>
                         <button class="delete-task" data-task-id="{{ task.id }}">
@@ -108,7 +108,7 @@
                                 </span>
                             {% endif %}
                             <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                                <h5 class="card-title mb-0">{{ task.title }}</h5>
+                                <p class="card-title mb-0">{{ task.title }}</p>
                             </a>
                         </div>
                         <button class="delete-task" data-task-id="{{ task.id }}">
@@ -164,7 +164,7 @@
                                 </span>
                             {% endif %}
                             <a href="{% url 'task_detail' task.id %}" class="task-title-link text-decoration-none">
-                                <h5 class="card-title mb-0">{{ task.title }}</h5>
+                                <p class="card-title mb-0">{{ task.title }}</p>
                             </a>
                         </div>
                         <button class="delete-task" data-task-id="{{ task.id }}">
@@ -301,11 +301,15 @@ body {
 h1 {
     font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 700;
+    font-size: 1.75rem;  /* Reduced from default h1 size */
+    margin-bottom: 0.5rem;
 }
 
-h2, h5 {
+h2 {
     font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 500;
+    font-size: 1.5rem;  /* Slightly smaller than h1 */
+    margin-bottom: 0.25rem;
 }
 
 .kanban-container {
@@ -559,6 +563,7 @@ h2, h5 {
     font-family: 'SF Compact Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 300;
     color: #6B7280;
+    font-size: 1rem;
 }
 
 .column-header {
@@ -573,20 +578,20 @@ h2, h5 {
 
 .not-started {
     background-color: #E1E4E8;
-    color: #6B7280;
+    color: #374151;
 }
 
 .doing {
     background-color: #F0E7F6;
-    color: #7B777E;
+    color: #4A2D5F;
 }
 
 .done {
     background-color: #FFDCE0;
-    color: #837173;
+    color: #6D1B20;
 }
 
-.kanban-card h5 {
+.kanban-card p.card-title {
     font-weight: 600;
     font-size: 15px;
     margin: 0 0 4px 0;
@@ -928,7 +933,7 @@ label {
 
 .priority-medium {
     background-color: #FFF3E0;
-    color: #EF6C00;
+    color: #B54D00;
 }
 
 .priority-high {
