@@ -17,61 +17,68 @@
     <!-- class="column-header 'not-started' 'doing' 'done' " = targets a specific column -->
 
     <div class="kanban-column">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="column-header not-started">Not Started</span>
-        <button class="add-task-btn" style="color: #6B7280; background: none; border: none; cursor: pointer;">+ Add Task</button>
-      </div>
-      <div class="task-list" data-status="not-started">
-        {% for task in tasks %}
-          {% if task.status.name == "not-started" %}
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="column-header not-started">Not Started</span>
+            <button class="add-task-btn" style="color: #6B7280; background: none; border: none; cursor: pointer;">+ Add
+                Task</button>
+        </div>
+        <div class="task-list" data-status="not-started">
+            {% for task in tasks %}
+            {% if task.status.name == "not-started" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-              <div class="card-header">
-                <h5>{{ task.title }}</h5>
-                <button class="delete-task" data-task-id="{{ task.id }}">×</button>
-              </div>
-              <p class="task-description" onclick="openTaskDetails('{{ task.title }}', '{{ task.description }}')" style="cursor: pointer;">{{ task.description }}</p>
+                <div class="card-header">
+                    <h5>{{ task.title }}</h5>
+                    <button class="delete-task" data-task-id="{{ task.id }}">×</button>
+                </div>
+                <p class="task-description"
+                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`)"
+                    style="cursor: pointer;">{{ task.description }}</p>
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
+            {% endif %}
+            {% endfor %}
+        </div>
     </div>
 
     <div class="kanban-column">
-      <span class="column-header doing">Doing</span>
-      <div class="task-list" data-status="doing">
-        {% for task in tasks %}
-          {% if task.status.name == "doing" %}
+        <span class="column-header doing">Doing</span>
+        <div class="task-list" data-status="doing">
+            {% for task in tasks %}
+            {% if task.status.name == "doing" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-              <div class="card-header">
-                <h5>{{ task.title }}</h5>
-                <button class="delete-task" data-task-id="{{ task.id }}">×</button>
-              </div>
-              <p class="task-description" onclick="openTaskDetails('{{ task.title }}', '{{ task.description }}')" style="cursor: pointer;">{{ task.description }}</p>
+                <div class="card-header">
+                    <h5>{{ task.title }}</h5>
+                    <button class="delete-task" data-task-id="{{ task.id }}">×</button>
+                </div>
+                <p class="task-description"
+                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`)"
+                    style="cursor: pointer;">{{ task.description }}</p>
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
+            {% endif %}
+            {% endfor %}
+        </div>
     </div>
 
     <div class="kanban-column">
-      <span class="column-header done">Done</span> 
-      <div class="task-list" data-status="done">
-        {% for task in tasks %}
-          {% if task.status.name == "done" %}
+        <span class="column-header done">Done</span>
+        <div class="task-list" data-status="done">
+            {% for task in tasks %}
+            {% if task.status.name == "done" %}
             <div class="kanban-card mb-3" data-task-id="{{ task.id }}">
-              <div class="card-header">
-                <h5>{{ task.title }}</h5>
-                <button class="delete-task" data-task-id="{{ task.id }}">×</button>
-              </div>
-              <p class="task-description" onclick="openTaskDetails('{{ task.title }}', '{{ task.description }}')" style="cursor: pointer;">{{ task.description }}</p>
+                <div class="card-header">
+                    <h5>{{ task.title }}</h5>
+                    <button class="delete-task" data-task-id="{{ task.id }}">×</button>
+                </div>
+                <p class="task-description"
+                    onclick="openTaskDetails(`{{ task.title|escapejs }}`, `{{ task.description|escapejs }}`, `{{ task.tag|escapejs }}`, `{{ task.duedate|date:'Y-m-d'|default:'No due date'|escapejs }}`, `{{ task.created_at|date:'Y-m-d H:i'|escapejs }}`, `{{ task.updated_at|date:'Y-m-d H:i'|escapejs }}`)"
+                    style="cursor: pointer;">{{ task.description }}</p>
             </div>
-          {% endif %}
-        {% endfor %}
-      </div>
+            {% endif %}
+            {% endfor %}
+        </div>
     </div>
-  </div>
+    </div>
 
-</div>
+    </div>
 
 <!--Here we will add the modal for adding a task-->
 
@@ -126,8 +133,32 @@
         </button>
       </div>
       <div class="modal-body">
-        <h6 id="modalTaskTitle"></h6>
-        <p id="modalTaskDescription"></p>
+        <div class="task-details-grid">
+          <div class="detail-item">
+            <h6 class="detail-label">Title</h6>
+            <p id="modalTaskTitle" class="detail-value"></p>
+          </div>
+          <div class="detail-item">
+            <h6 class="detail-label">Description</h6>
+            <p id="modalTaskDescription" class="detail-value"></p>
+          </div>
+          <div class="detail-item">
+            <h6 class="detail-label">Tag</h6>
+            <p id="modalTaskTag" class="detail-value"></p>
+          </div>
+          <div class="detail-item">
+            <h6 class="detail-label">Due Date</h6>
+            <p id="modalTaskDueDate" class="detail-value"></p>
+          </div>
+          <div class="detail-item">
+            <h6 class="detail-label">Created</h6>
+            <p id="modalTaskCreatedAt" class="detail-value"></p>
+          </div>
+          <div class="detail-item">
+            <h6 class="detail-label">Last Updated</h6>
+            <p id="modalTaskUpdatedAt" class="detail-value"></p>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -478,6 +509,33 @@ h2, h5 {
 .delete-task:hover {
     color: #EF4444;
 }
+
+.task-details-grid {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.detail-item {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 1rem;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #4B5563;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.detail-value {
+    color: #1F2937;
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.5;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -589,9 +647,13 @@ document.querySelectorAll('.delete-task').forEach(button => {
     });
 });
 
-function openTaskDetails(title, description) {
+function openTaskDetails(title, description, tag, dueDate, createdAt, updatedAt) {
     document.getElementById('modalTaskTitle').textContent = title;
     document.getElementById('modalTaskDescription').textContent = description;
+    document.getElementById('modalTaskTag').textContent = tag || 'No tag';
+    document.getElementById('modalTaskDueDate').textContent = dueDate || 'No due date set';
+    document.getElementById('modalTaskCreatedAt').textContent = createdAt || 'Unknown';
+    document.getElementById('modalTaskUpdatedAt').textContent = updatedAt || 'Unknown';
     $('#taskDetailsModal').modal('show');
 }
 </script>
