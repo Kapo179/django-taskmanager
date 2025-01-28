@@ -4,129 +4,128 @@
 {% block content %}
 <div class="container my-4">
     <!-- Back to Board Link -->
-    <a href="{% url 'board' %}" class="text-decoration-none text-muted mb-4 d-inline-block">
-        <i class="bi bi-arrow-left"></i> Back to Board
+    <a href="{% url 'board' %}" class="back-link mb-3 d-inline-block">
+        ← Back to Board
     </a>
 
-    <!-- Task Details Container -->
-    <div class="task-detail-container bg-white rounded-lg shadow-sm p-4">
+    <div class="task-detail-container">
         <!-- Task Title -->
-        <div class="mb-4">
-            <input type="text" class="form-control-plaintext form-control-lg fw-bold" 
-                   id="taskTitle" value="{{ task.title }}" readonly>
+        <div class="task-title-section">
+            <h2>{{ task.title }}</h2>
         </div>
 
-        <!-- Task Summary Box -->
-        <div class="task-summary p-3 bg-light rounded mb-4">
-            <div class="d-flex gap-4 mb-3">
-                <div>
-                    <span class="text-muted small d-block mb-1">Status</span>
-                    <select class="form-select form-select-sm" id="taskStatus">
-                        <option value="not-started" {% if task.status.name == 'not-started' %}selected{% endif %}>Not Started</option>
-                        <option value="doing" {% if task.status.name == 'doing' %}selected{% endif %}>Doing</option>
-                        <option value="done" {% if task.status.name == 'done' %}selected{% endif %}>Done</option>
-                    </select>
-                </div>
-                <div>
-                    <span class="text-muted small d-block mb-1">Priority</span>
-                    <div>{{ task.tag }}</div>
-                </div>
-                <div>
-                    <span class="text-muted small d-block mb-1">Due Date</span>
-                    <div>{{ task.duedate|date:"M d, Y"|default:"No due date" }}</div>
+        <!-- Task Info Grid -->
+        <div class="task-info-grid">
+            <!-- Status -->
+            <div class="info-item">
+                <div class="info-label">
+                    <span class="info-emoji">📋</span>
+                    <span>{{ task.status.name|title }}</span>
                 </div>
             </div>
-            <div>
-                <span class="text-muted small d-block mb-1">Description</span>
-                <p class="mb-0">{{ task.description }}</p>
+
+            <!-- Priority -->
+            {% if task.tag %}
+            <div class="info-item">
+                <div class="info-label">
+                    <span class="info-emoji">🚩</span>
+                    <span>{{ task.tag }}</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Due Date -->
+            {% if task.duedate %}
+            <div class="info-item">
+                <div class="info-label">
+                    <span class="info-emoji">📅</span>
+                    <span>Due {{ task.duedate|date:"M d, Y" }}</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Created Date -->
+            <div class="info-item">
+                <div class="info-label">
+                    <span class="info-emoji">⏰</span>
+                    <span>Created {{ task.created_at|date:"M d, Y" }}</span>
+                </div>
             </div>
         </div>
 
-        <!-- Notes Section -->
-        <div class="notes-section">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="mb-0">Notes</h6>
-                <button class="btn btn-sm btn-light" onclick="addNote()">
-                    Add Note
-                </button>
-            </div>
-            <div id="notesList" class="timeline-simple">
-                <!-- Notes will be added here -->
-            </div>
+        <!-- Description Section -->
+        <div class="description-section">
+            <h6 class="text-muted mb-3">Task Details</h6>
+            <p class="mb-0">{{ task.description }}</p>
         </div>
     </div>
 </div>
 
 <style>
-/* Timeline Style */
-.timeline-simple {
-    border-left: 2px solid #e5e7eb;
-    padding-left: 1rem;
-    margin-left: 0.5rem;
-}
+    .task-detail-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+    }
 
-.timeline-simple .entry {
-    position: relative;
-    margin-bottom: 1rem;
-    padding-left: 1rem;
-}
+    .back-link {
+        color: #6B7280;
+        text-decoration: none;
+        font-size: 0.875rem;
+    }
 
-.timeline-simple .entry::before {
-    content: '';
-    position: absolute;
-    left: -0.35rem;
-    top: 0.5rem;
-    width: 0.5rem;
-    height: 0.5rem;
-    background: #fff;
-    border: 2px solid #6B7280;
-    border-radius: 50%;
-}
+    .back-link:hover {
+        color: #374151;
+        text-decoration: none;
+    }
 
-.entry-content {
-    background: #f9fafb;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    font-size: 0.9rem;
-}
+    .task-title-section {
+        margin-bottom: 1.5rem;
+    }
 
-.entry-date {
-    font-size: 0.75rem;
-    color: #6B7280;
-}
+    .task-title-section h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .task-info-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 0.5rem 0;
+    }
+
+    .info-item {
+        color: #6B7280;
+    }
+
+    .info-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .info-emoji {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        font-size: 1rem;
+    }
+
+    .description-section {
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .description-section p {
+        color: #374151;
+        line-height: 1.5;
+    }
 </style>
-
-<script>
-function addNote() {
-    const notesList = document.getElementById('notesList');
-    const newEntry = document.createElement('div');
-    newEntry.className = 'entry';
-    newEntry.innerHTML = `
-        <div class="entry-content">
-            <div class="entry-date">${new Date().toLocaleString()}</div>
-            <textarea class="form-control form-control-sm mb-2" rows="2" placeholder="Add a note..."></textarea>
-            <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-sm btn-light" onclick="cancelNote(this)">Cancel</button>
-                <button class="btn btn-sm btn-dark" onclick="saveNote(this)">Save</button>
-            </div>
-        </div>
-    `;
-    notesList.prepend(newEntry);
-}
-
-function saveNote(button) {
-    const entryContent = button.closest('.entry-content');
-    const text = entryContent.querySelector('textarea').value;
-    const date = entryContent.querySelector('.entry-date').textContent;
-    
-    entryContent.innerHTML = `
-        <div class="entry-date">${date}</div>
-        <p class="mb-0">${text}</p>
-    `;
-}
-
-function cancelNote(button) {
-    button.closest('.entry').remove();
-}
-</script>
-{% endblock %} 
+{% endblock %}
