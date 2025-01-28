@@ -32,10 +32,7 @@
             <div class="kanban-column" role="region" aria-label="Not Started Tasks">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="column-header not-started">Not Started</span>
-                    <button class="add-task-btn d-flex align-items-center gap-1" aria-label="Add New Task">
-                        <span class="d-none d-sm-inline">Add Task</span>
-                        <span class="d-inline d-sm-none">+</span>
-                    </button>
+            <button class="add-task-btn" style="color: #374151; background: none; border: none; cursor: pointer;" aria-label="Add New Task">+ Add Task</button>
                 </div>
                 <div class="task-list" data-status="not-started" role="list">
                     {% for task in tasks %}
