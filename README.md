@@ -316,6 +316,27 @@ taskmanager/boards/urls.py
 
 ---
 
+### AI-Usage
+
+- **AI-UI/UX Fixing**
+**Explanation**: When there were issues, with the modal, I used. I often used AI to Identify key difference in my iteration compared to the open-source code.
+![image](https://github.com/user-attachments/assets/893f199a-7839-41a0-a638-cb04f92ca7e7)
+
+- **AI-Bug-Fixing**
+**Explanation**: I also utilised AI to identify key areas, to focus my debug efforts, when I couldn't clearly determine the core issue.
+![image](https://github.com/user-attachments/assets/592e0a9d-b4e0-4fb0-b452-88666c00a6fd)
+
+- **AI-Generated Code Usage**
+**Explanation**: I'd utilise AI to generate code as shown in the example, which would speed up the time to small features; in this case, `The Time Elapsed Counter`
+![image](https://github.com/user-attachments/assets/02fafdb3-ca1a-4dd7-ac49-9df5559e5a53)
+
+- **AI-Augmented Workflow**
+
+**Explanation**: Adopting AI into my workflow enhanced and improved, Bug Fix time, CSS Application and overall my project development experience due to access to such swift support. Especially in errors, where I'm often week. AI would allow me to learn how to overcome these challenges
+![image](https://github.com/user-attachments/assets/1a210e91-9cd3-4fa5-bf42-eaf3253c794e)
+
+
+
 ## Deployment
 
 - **Platform**: Deployed on [Heroku: https://djangotaskmanager-4150dc63d3e8.herokuapp.com/ ]  
